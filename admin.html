@@ -1,0 +1,932 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102b22">
+<title>Admin Panel | Qalb-e-Deen</title>
+
+<style>
+:root {
+  --bg:#f3f6f4;
+  --card:#fff;
+  --green:#123d2d;
+  --green2:#1b6246;
+  --gold:#c9a45c;
+  --text:#20342b;
+  --muted:#6d7d74;
+  --border:#dce6df;
+  --red:#b42318;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif
+}
+header{background:var(--green);color:white;padding:20px 16px}
+.header-inner{
+  max-width:1150px;margin:auto;display:flex;
+  justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap
+}
+header h1{margin:0;font-size:22px}
+header p{margin:5px 0 0;color:#d8e7dc;font-size:13px}
+.container{max-width:1150px;margin:22px auto;padding:0 14px 40px}
+.hidden{display:none!important}
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:15px;padding:18px;margin-bottom:18px;
+  box-shadow:0 3px 12px #142d1b08
+}
+h2{font-size:19px;margin:0 0 14px}
+label{display:block;font-size:13px;font-weight:650;margin:12px 0 6px}
+input,textarea,select{
+  width:100%;padding:12px;border:1px solid #ccd8cf;
+  border-radius:9px;background:#fff;font:inherit;color:var(--text)
+}
+textarea{min-height:110px;resize:vertical}
+button,.button{
+  border:0;border-radius:9px;padding:11px 15px;
+  background:var(--green2);color:white;font-weight:650;
+  cursor:pointer;font:inherit;font-size:14px;
+  text-decoration:none;display:inline-block
+}
+button:disabled{opacity:.55;cursor:not-allowed}
+.btn-secondary{background:#e7eee9;color:var(--green)}
+.btn-danger{background:#b42318;color:white}
+.btn-gold{background:#a47b2d;color:white}
+.btn-small{padding:7px 10px;font-size:12px;margin:3px 2px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.notice{
+  padding:12px 14px;border-radius:10px;margin:12px 0;
+  background:#edf4ef;border:1px solid var(--border);
+  font-size:14px;overflow-wrap:anywhere
+}
+.notice.error{background:#fff0ee;color:#8e2017;border-color:#f2c5bf}
+.notice.success{background:#e9f7ed;color:#17603a}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:#fff;border:1px solid var(--border);padding:17px;border-radius:13px}
+.stat span{display:block;font-size:13px;color:var(--muted)}
+.stat strong{display:block;font-size:29px;margin-top:5px;color:var(--green)}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin:20px 0}
+.tabs button{white-space:nowrap;flex-shrink:0}
+.tabs button.active{background:var(--gold);color:#fff}
+.tab-panel{min-width:0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.item{
+  border:1px solid var(--border);border-radius:11px;
+  padding:13px;margin:10px 0;overflow-wrap:anywhere
+}
+.item p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}
+.item small,.status{color:var(--muted);font-size:13px}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}
+@media(max-width:760px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two-col{grid-template-columns:1fr}
+  .container{margin-top:14px}
+  .card{padding:14px}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="header-inner">
+    <div>
+      <h1>☪ Qalb-e-Deen Admin</h1>
+      <p>The Heart of Deen — Content Management</p>
+    </div>
+    <button id="logoutBtn" class="hidden btn-secondary">Logout</button>
+  </div>
+</header>
+
+<main class="container">
+  <div id="globalMessage" class="notice hidden" role="status"></div>
+
+  <section id="loginSection" class="card">
+    <h2>Admin Login</h2>
+    <p>অনুমোদিত অ্যাডমিন অ্যাকাউন্ট দিয়ে লগইন করো।</p>
+    <form id="loginForm">
+      <label for="loginEmail">Email</label>
+      <input id="loginEmail" type="email" autocomplete="username" required>
+
+      <label for="loginPassword">Password</label>
+      <input id="loginPassword" type="password"
+        autocomplete="current-password" required>
+
+      <div class="actions">
+        <button id="loginBtn" type="submit">Login to Dashboard</button>
+      </div>
+    </form>
+    <div id="loginMessage" class="notice hidden"></div>
+  </section>
+
+  <section id="adminApp" class="hidden">
+    <div class="card">
+      <h2>Dashboard Overview</h2>
+      <div id="adminIdentity" class="status">Admin যাচাই করা হচ্ছে…</div>
+
+      <div class="grid">
+        <div class="stat"><span>মোট পোস্ট</span><strong id="postsCount">—</strong></div>
+        <div class="stat"><span>মোট কমেন্ট</span><strong id="commentsCount">—</strong></div>
+        <div class="stat"><span>Quran PDF Records</span><strong id="pdfCount">—</strong></div>
+        <div class="stat"><span>মোট হাদিস</span><strong id="hadithCount">—</strong></div>
+      </div>
+
+      <p id="dashboardStatus" class="status">Dashboard লোড হচ্ছে…</p>
+      <button id="refreshDashboard" class="btn-secondary">Refresh Dashboard</button>
+    </div>
+
+    <nav class="tabs" aria-label="Admin sections">
+      <button class="active" data-tab="postsPanel">Posts</button>
+      <button data-tab="commentsPanel">Comments</button>
+      <button data-tab="pdfPanel">Quran PDF</button>
+      <button data-tab="hadithPanel">Hadith Management</button>
+    </nav>
+
+    <!-- POSTS -->
+    <section id="postsPanel" class="tab-panel">
+      <div class="card">
+        <h2 id="postFormTitle">নতুন পোস্ট প্রকাশ</h2>
+        <form id="postForm">
+          <input id="postId" type="hidden">
+
+          <label for="postTitle">পোস্টের শিরোনাম *</label>
+          <input id="postTitle" required maxlength="250">
+
+          <label for="postCategory">বিভাগ</label>
+          <input id="postCategory" maxlength="100" placeholder="ইসলামিক জ্ঞান, কোরআন, হাদিস">
+
+          <label for="postImage">ছবির URL</label>
+          <input id="postImage" type="url" placeholder="https://example.com/image.jpg">
+
+          <label for="postExcerpt">সংক্ষিপ্ত বিবরণ</label>
+          <textarea id="postExcerpt" rows="3"></textarea>
+
+          <label for="postContent">সম্পূর্ণ পোস্ট *</label>
+          <textarea id="postContent" required></textarea>
+
+          <div class="actions">
+            <button id="savePostBtn" type="submit">Publish Post</button>
+            <button id="cancelPostEdit" type="button"
+              class="btn-secondary hidden">Cancel Edit</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>প্রকাশিত পোস্ট</h2>
+        <button id="reloadPosts" class="btn-secondary">Reload Posts</button>
+        <div id="postsList" class="status">পোস্ট লোড হচ্ছে…</div>
+      </div>
+    </section>
+
+    <!-- COMMENTS -->
+    <section id="commentsPanel" class="tab-panel hidden">
+      <div class="card">
+        <h2>Comment Moderation</h2>
+        <p>কমেন্ট দেখা ও মুছে ফেলার ব্যবস্থা।</p>
+        <button id="reloadComments" class="btn-secondary">Reload Comments</button>
+        <div id="commentsList" class="status">কমেন্ট লোড হচ্ছে…</div>
+      </div>
+    </section>
+
+    <!-- QURAN PDF -->
+    <section id="pdfPanel" class="tab-panel hidden">
+      <div class="card">
+        <h2>Quran PDF Library</h2>
+        <p>এখানে PDF-এর নাম ও URL সংরক্ষণ হবে। সরাসরি ফাইল আপলোডের জন্য Storage প্রয়োজন।</p>
+
+        <form id="pdfForm">
+          <input id="pdfId" type="hidden">
+
+          <label for="pdfTitle">PDF-এর নাম *</label>
+          <input id="pdfTitle" required maxlength="200">
+
+          <label for="pdfUrl">PDF URL *</label>
+          <input id="pdfUrl" type="url" required
+            placeholder="https://... অথবা repository-র relative path">
+
+          <label for="pdfLanguage">ভাষা / বিবরণ</label>
+          <input id="pdfLanguage" maxlength="100" placeholder="Arabic-English">
+
+          <div class="actions">
+            <button id="savePdfBtn" type="submit">Save PDF Record</button>
+            <button id="cancelPdfEdit" type="button"
+              class="btn-secondary hidden">Cancel Edit</button>
+          </div>
+        </form>
+
+        <div class="notice">
+          GitHub repository-তে থাকা PDF-এর ফাইলনাম ও path সঠিকভাবে দিতে হবে।
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Saved Quran PDFs</h2>
+        <button id="reloadPdfs" class="btn-secondary">Reload PDF List</button>
+        <div id="pdfList" class="status">PDF রেকর্ড লোড হচ্ছে…</div>
+      </div>
+    </section>
+
+    <!-- HADITH -->
+    <section id="hadithPanel" class="tab-panel hidden">
+      <div class="card">
+        <h2 id="hadithFormTitle">নতুন হাদিস যোগ করুন</h2>
+
+        <form id="hadithForm">
+          <input id="hadithId" type="hidden">
+
+          <label for="hadithTitle">শিরোনাম</label>
+          <input id="hadithTitle" maxlength="200">
+
+          <label for="hadithArabic">আরবি *</label>
+          <textarea id="hadithArabic" required></textarea>
+
+          <label for="hadithTransliteration">বাংলা উচ্চারণ</label>
+          <textarea id="hadithTransliteration"></textarea>
+
+          <label for="hadithEnglishPronunciation">English Pronunciation</label>
+          <textarea id="hadithEnglishPronunciation"></textarea>
+
+          <label for="hadithTranslation">বাংলা অনুবাদ *</label>
+          <textarea id="hadithTranslation" required></textarea>
+
+          <label for="hadithExplanation">ব্যাখ্যা</label>
+          <textarea id="hadithExplanation"></textarea>
+
+          <label for="hadithLesson">শিক্ষা / করণীয়</label>
+          <textarea id="hadithLesson"></textarea>
+
+          <div class="two-col">
+            <div>
+              <label for="hadithSource">সূত্র / গ্রন্থ</label>
+              <input id="hadithSource" maxlength="200">
+            </div>
+            <div>
+              <label for="hadithNumber">হাদিস নম্বর</label>
+              <input id="hadithNumber" maxlength="100">
+            </div>
+          </div>
+
+          <label for="hadithActive">প্রদর্শনের অবস্থা</label>
+          <select id="hadithActive">
+            <option value="true">সক্রিয়</option>
+            <option value="false">নিষ্ক্রিয়</option>
+          </select>
+
+          <div class="actions">
+            <button id="saveHadithBtn" type="submit">Save Hadith</button>
+            <button id="cancelHadithEdit" type="button"
+              class="btn-secondary hidden">Cancel Edit</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Hadith Records</h2>
+        <button id="reloadHadiths" class="btn-secondary">Reload Hadiths</button>
+        <div id="hadithList" class="status">হাদিস লোড হচ্ছে…</div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<footer>Qalb-e-Deen — The Heart of Deen</footer>
+
+<script type="module">
+import { initializeApp } from
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getFirestore, collection, doc, getDoc, getDocs, addDoc,
+  updateDoc, deleteDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* FIREBASE CONFIG — তোমার পাঠানো configuration */
+const firebaseConfig = {
+  apiKey: "AIzaSyC4sRpUYVLURCkbAbfvUccL5n71Dveiik4",
+  authDomain: "qalb-e-deen-b765a.firebaseapp.com",
+  projectId: "qalb-e-deen-b765a",
+  storageBucket: "qalb-e-deen-b765a.firebasestorage.app",
+  messagingSenderId: "226972777842",
+  appId: "1:226972777842:web:0d1439b9d4dc66d8bfb1eb"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+/*
+  তোমার Admin document:
+  user/{UID}
+  Fields: email, name, role: admin
+
+  যদি Firestore Rules-এ users (plural) থাকে,
+  collection নাম মিলিয়ে নিতে হবে।
+*/
+const ADMIN_COLLECTION = "user";
+
+let currentUser = null;
+let isAdmin = false;
+
+const $ = id => document.getElementById(id);
+
+function showMessage(message, type = "") {
+  const box = $("globalMessage");
+  box.textContent = message;
+  box.className = "notice" + (type ? " " + type : "");
+  box.classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showLoginMessage(message, isError = true) {
+  const box = $("loginMessage");
+  box.textContent = message;
+  box.className = "notice " + (isError ? "error" : "success");
+  box.classList.remove("hidden");
+}
+
+function errorText(error) {
+  const code = error?.code || "";
+  const message = error?.message || String(error);
+
+  if (code.includes("api-key-not-valid")) {
+    return "Firebase API Key সঠিক নয়। Firebase Console থেকে আসল apiKey কপি করো।";
+  }
+  if (code.includes("permission-denied")) {
+    return "Permission denied: Firestore Rules পরীক্ষা করো।";
+  }
+  if (code.includes("unauthenticated")) {
+    return "লগইন সেশন শেষ হয়েছে। আবার লগইন করো।";
+  }
+  if (code.includes("network")) {
+    return "নেটওয়ার্ক সমস্যা। ইন্টারনেট সংযোগ পরীক্ষা করো।";
+  }
+  return message;
+}
+
+function escapeHtml(value = "") {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  })[char]);
+}
+
+function formatDate(value) {
+  if (!value) return "তারিখ নেই";
+  try {
+    const date = value.toDate ? value.toDate() : new Date(value);
+    return Number.isNaN(date.getTime())
+      ? "তারিখ নেই" : date.toLocaleString("bn-BD");
+  } catch {
+    return "তারিখ নেই";
+  }
+}
+
+function requireAdmin() {
+  if (!currentUser || !isAdmin) {
+    throw new Error("অ্যাডমিন অনুমতি নেই। আবার লগইন করে role পরীক্ষা করো।");
+  }
+}
+
+async function getCollectionDocs(name) {
+  requireAdmin();
+  const snapshot = await getDocs(collection(db, name));
+  return snapshot.docs.map(item => ({id:item.id,...item.data()}));
+}
+
+/* LOGIN */
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  $("loginBtn").disabled = true;
+  $("loginBtn").textContent = "Logging in…";
+
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      $("loginEmail").value.trim(),
+      $("loginPassword").value
+    );
+  } catch (error) {
+    showLoginMessage("Login failed: " + errorText(error));
+  } finally {
+    $("loginBtn").disabled = false;
+    $("loginBtn").textContent = "Login to Dashboard";
+  }
+});
+
+$("logoutBtn").addEventListener("click", () => signOut(auth));
+
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  isAdmin = false;
+
+  $("adminApp").classList.add("hidden");
+  $("logoutBtn").classList.add("hidden");
+  $("loginSection").classList.remove("hidden");
+
+  if (!user) {
+    $("adminIdentity").textContent = "লগইন করা হয়নি";
+    return;
+  }
+
+  $("loginSection").classList.add("hidden");
+  $("adminApp").classList.remove("hidden");
+  $("logoutBtn").classList.remove("hidden");
+  $("adminIdentity").textContent = "Admin যাচাই করা হচ্ছে…";
+
+  try {
+    const adminSnap = await getDoc(doc(db, ADMIN_COLLECTION, user.uid));
+
+    if (!adminSnap.exists() || adminSnap.data().role !== "admin") {
+      throw new Error(
+        "অ্যাডমিন ডকুমেন্ট পাওয়া যায়নি। Firestore-এ user/" +
+        user.uid + " ডকুমেন্টের role: admin পরীক্ষা করো।"
+      );
+    }
+
+    isAdmin = true;
+    $("adminIdentity").textContent =
+      "Logged in: " + (user.email || user.uid) + " — Admin verified";
+
+    await loadDashboard();
+    await loadPosts();
+  } catch (error) {
+    isAdmin = false;
+    $("adminIdentity").textContent = "Admin verification failed";
+    showMessage(errorText(error), "error");
+    $("adminApp").classList.add("hidden");
+    $("loginSection").classList.remove("hidden");
+    $("loginEmail").value = user.email || "";
+  }
+});
+
+/* DASHBOARD — independent collection reads */
+async function loadDashboard() {
+  requireAdmin();
+  $("dashboardStatus").textContent = "সংখ্যাগুলো লোড হচ্ছে…";
+
+  const jobs = [
+    ["posts","postsCount"],
+    ["comments","commentsCount"],
+    ["quranPDFs","pdfCount"],
+    ["hadiths","hadithCount"]
+  ];
+
+  const results = await Promise.allSettled(
+    jobs.map(([name]) => getDocs(collection(db,name)))
+  );
+
+  const problems = [];
+
+  results.forEach((result,index) => {
+    const [name,countId] = jobs[index];
+    if (result.status === "fulfilled") {
+      $(countId).textContent = result.value.size;
+    } else {
+      $(countId).textContent = "—";
+      problems.push(name + ": " + errorText(result.reason));
+    }
+  });
+
+  $("dashboardStatus").textContent = problems.length
+    ? "কিছু collection পড়া যায়নি — " + problems.join(" | ")
+    : "Dashboard সফলভাবে আপডেট হয়েছে।";
+}
+
+$("refreshDashboard").addEventListener("click", async () => {
+  try { await loadDashboard(); }
+  catch (error) { showMessage(errorText(error),"error"); }
+});
+
+/* NAVIGATION */
+document.querySelectorAll("[data-tab]").forEach(button => {
+  button.addEventListener("click", async () => {
+    document.querySelectorAll("[data-tab]").forEach(item =>
+      item.classList.toggle("active",item === button)
+    );
+    document.querySelectorAll(".tab-panel").forEach(panel =>
+      panel.classList.toggle("hidden",panel.id !== button.dataset.tab)
+    );
+
+    try {
+      if (button.dataset.tab === "postsPanel") await loadPosts();
+      if (button.dataset.tab === "commentsPanel") await loadComments();
+      if (button.dataset.tab === "pdfPanel") await loadPdfs();
+      if (button.dataset.tab === "hadithPanel") await loadHadiths();
+    } catch (error) {
+      showMessage(errorText(error),"error");
+    }
+  });
+});
+
+/* POSTS */
+function resetPostForm() {
+  $("postForm").reset();
+  $("postId").value = "";
+  $("postFormTitle").textContent = "নতুন পোস্ট প্রকাশ";
+  $("savePostBtn").textContent = "Publish Post";
+  $("cancelPostEdit").classList.add("hidden");
+}
+
+$("cancelPostEdit").addEventListener("click",resetPostForm);
+
+$("postForm").addEventListener("submit",async event => {
+  event.preventDefault();
+
+  try {
+    requireAdmin();
+    const id = $("postId").value;
+    const payload = {
+      title:$("postTitle").value.trim(),
+      category:$("postCategory").value.trim(),
+      image:$("postImage").value.trim(),
+      excerpt:$("postExcerpt").value.trim(),
+      content:$("postContent").value.trim(),
+      updatedAt:serverTimestamp()
+    };
+
+    if (!payload.title || !payload.content) {
+      throw new Error("শিরোনাম ও পোস্টের লেখা দিতে হবে।");
+    }
+
+    $("savePostBtn").disabled = true;
+
+    if (id) {
+      await updateDoc(doc(db,"posts",id),payload);
+      showMessage("পোস্ট আপডেট হয়েছে।","success");
+    } else {
+      payload.createdAt = serverTimestamp();
+      payload.views = 0;
+      await addDoc(collection(db,"posts"),payload);
+      showMessage("নতুন পোস্ট প্রকাশ হয়েছে।","success");
+    }
+
+    resetPostForm();
+    await Promise.all([loadPosts(),loadDashboard()]);
+  } catch (error) {
+    showMessage("পোস্ট সংরক্ষণ করা যায়নি: "+errorText(error),"error");
+  } finally {
+    $("savePostBtn").disabled = false;
+  }
+});
+
+async function loadPosts() {
+  requireAdmin();
+  const box = $("postsList");
+  box.textContent = "পোস্ট লোড হচ্ছে…";
+
+  try {
+    const items = await getCollectionDocs("posts");
+    items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+
+    if (!items.length) {
+      box.textContent = "এখনো কোনো পোস্ট নেই।";
+      return;
+    }
+
+    box.innerHTML = items.map(item => `
+      <article class="item">
+        <strong>${escapeHtml(item.title || "শিরোনাম নেই")}</strong>
+        <p>${escapeHtml(item.excerpt || item.content || "").slice(0,350)}</p>
+        <small>বিভাগ: ${escapeHtml(item.category || "নির্ধারিত নয়")}
+          · Views: ${Number(item.views)||0}
+          · ${escapeHtml(formatDate(item.createdAt))}</small>
+        <div class="actions">
+          <button class="btn-small" data-edit-post="${escapeHtml(item.id)}">Edit</button>
+          <button class="btn-small btn-danger" data-delete-post="${escapeHtml(item.id)}">Delete</button>
+        </div>
+      </article>`).join("");
+
+    box.querySelectorAll("[data-edit-post]").forEach(button => {
+      button.addEventListener("click",() => {
+        const item = items.find(x=>x.id===button.dataset.editPost);
+        if (!item) return;
+        $("postId").value = item.id;
+        $("postTitle").value = item.title||"";
+        $("postCategory").value = item.category||"";
+        $("postImage").value = item.image||"";
+        $("postExcerpt").value = item.excerpt||"";
+        $("postContent").value = item.content||"";
+        $("postFormTitle").textContent = "পোস্ট সম্পাদনা";
+        $("savePostBtn").textContent = "Update Post";
+        $("cancelPostEdit").classList.remove("hidden");
+        $("postForm").scrollIntoView({behavior:"smooth"});
+      });
+    });
+
+    box.querySelectorAll("[data-delete-post]").forEach(button => {
+      button.addEventListener("click",async () => {
+        if (!confirm("এই পোস্টটি স্থায়ীভাবে মুছে ফেলবে?")) return;
+        try {
+          requireAdmin();
+          await deleteDoc(doc(db,"posts",button.dataset.deletePost));
+          showMessage("পোস্ট মুছে ফেলা হয়েছে।","success");
+          await Promise.all([loadPosts(),loadDashboard()]);
+        } catch (error) {
+          showMessage("পোস্ট মুছতে সমস্যা: "+errorText(error),"error");
+        }
+      });
+    });
+  } catch (error) {
+    box.textContent = "পোস্ট লোড করা যায়নি: "+errorText(error);
+  }
+}
+$("reloadPosts").addEventListener("click",loadPosts);
+
+/* COMMENTS */
+async function loadComments() {
+  requireAdmin();
+  const box = $("commentsList");
+  box.textContent = "কমেন্ট লোড হচ্ছে…";
+
+  try {
+    const items = await getCollectionDocs("comments");
+    items.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+
+    if (!items.length) {
+      box.textContent = "কোনো কমেন্ট পাওয়া যায়নি।";
+      return;
+    }
+
+    box.innerHTML = items.map(item => `
+      <article class="item">
+        <strong>${escapeHtml(item.name||item.userName||item.email||"ব্যবহারকারী")}</strong>
+        <p>${escapeHtml(item.text||item.comment||item.content||item.message||"কমেন্টের লেখা নেই")}</p>
+        <small>Post ID: ${escapeHtml(item.postId||"উল্লেখ নেই")}
+          · ${escapeHtml(formatDate(item.createdAt))}</small>
+        <div class="actions">
+          <button class="btn-small btn-danger"
+            data-delete-comment="${escapeHtml(item.id)}">Delete Comment</button>
+        </div>
+      </article>`).join("");
+
+    box.querySelectorAll("[data-delete-comment]").forEach(button => {
+      button.addEventListener("click",async () => {
+        if (!confirm("এই কমেন্টটি মুছে ফেলবে?")) return;
+        try {
+          requireAdmin();
+          await deleteDoc(doc(db,"comments",button.dataset.deleteComment));
+          showMessage("কমেন্ট মুছে ফেলা হয়েছে।","success");
+          await Promise.all([loadComments(),loadDashboard()]);
+        } catch (error) {
+          showMessage("কমেন্ট মুছতে সমস্যা: "+errorText(error),"error");
+        }
+      });
+    });
+  } catch (error) {
+    box.textContent = "কমেন্ট লোড করা যায়নি: "+errorText(error);
+  }
+}
+$("reloadComments").addEventListener("click",loadComments);
+
+/* QURAN PDF LIBRARY */
+function resetPdfForm() {
+  $("pdfForm").reset();
+  $("pdfId").value = "";
+  $("savePdfBtn").textContent = "Save PDF Record";
+  $("cancelPdfEdit").classList.add("hidden");
+}
+$("cancelPdfEdit").addEventListener("click",resetPdfForm);
+
+$("pdfForm").addEventListener("submit",async event => {
+  event.preventDefault();
+  try {
+    requireAdmin();
+    const id = $("pdfId").value;
+    const payload = {
+      title:$("pdfTitle").value.trim(),
+      url:$("pdfUrl").value.trim(),
+      language:$("pdfLanguage").value.trim(),
+      updatedAt:serverTimestamp()
+    };
+
+    if (!payload.title || !payload.url) {
+      throw new Error("PDF-এর নাম ও URL দিতে হবে।");
+    }
+
+    $("savePdfBtn").disabled = true;
+    if (id) {
+      await updateDoc(doc(db,"quranPDFs",id),payload);
+      showMessage("PDF রেকর্ড আপডেট হয়েছে।","success");
+    } else {
+      payload.createdAt = serverTimestamp();
+      await addDoc(collection(db,"quranPDFs"),payload);
+      showMessage("PDF রেকর্ড সংরক্ষিত হয়েছে।","success");
+    }
+
+    resetPdfForm();
+    await Promise.all([loadPdfs(),loadDashboard()]);
+  } catch (error) {
+    showMessage("PDF রেকর্ড সংরক্ষণ হয়নি: "+errorText(error),"error");
+  } finally {
+    $("savePdfBtn").disabled = false;
+  }
+});
+
+async function loadPdfs() {
+  requireAdmin();
+  const box = $("pdfList");
+  box.textContent = "PDF রেকর্ড লোড হচ্ছে…";
+
+  try {
+    const items = await getCollectionDocs("quranPDFs");
+    if (!items.length) {
+      box.textContent = "কোনো PDF রেকর্ড নেই।";
+      return;
+    }
+
+    box.innerHTML = items.map(item => `
+      <article class="item">
+        <strong>${escapeHtml(item.title||"নাম নেই")}</strong>
+        <p>${escapeHtml(item.language||"")}</p>
+        <p>${escapeHtml(item.url||"")}</p>
+        <div class="actions">
+          <button class="btn-small" data-edit-pdf="${escapeHtml(item.id)}">Edit</button>
+          <a class="button btn-small" href="${escapeHtml(item.url||"#")}"
+            target="_blank" rel="noopener noreferrer">Open PDF</a>
+          <button class="btn-small btn-danger" data-delete-pdf="${escapeHtml(item.id)}">Delete</button>
+        </div>
+      </article>`).join("");
+
+    box.querySelectorAll("[data-edit-pdf]").forEach(button => {
+      button.addEventListener("click",() => {
+        const item = items.find(x=>x.id===button.dataset.editPdf);
+        if (!item) return;
+        $("pdfId").value = item.id;
+        $("pdfTitle").value = item.title||"";
+        $("pdfUrl").value = item.url||"";
+        $("pdfLanguage").value = item.language||"";
+        $("savePdfBtn").textContent = "Update PDF Record";
+        $("cancelPdfEdit").classList.remove("hidden");
+        $("pdfForm").scrollIntoView({behavior:"smooth"});
+      });
+    });
+
+    box.querySelectorAll("[data-delete-pdf]").forEach(button => {
+      button.addEventListener("click",async () => {
+        if (!confirm("এই PDF রেকর্ড মুছে ফেলবে?")) return;
+        try {
+          requireAdmin();
+          await deleteDoc(doc(db,"quranPDFs",button.dataset.deletePdf));
+          showMessage("PDF রেকর্ড মুছে ফেলা হয়েছে।","success");
+          await Promise.all([loadPdfs(),loadDashboard()]);
+        } catch (error) {
+          showMessage("PDF রেকর্ড মুছতে সমস্যা: "+errorText(error),"error");
+        }
+      });
+    });
+  } catch (error) {
+    box.textContent = "PDF রেকর্ড লোড করা যায়নি: "+errorText(error);
+  }
+}
+$("reloadPdfs").addEventListener("click",loadPdfs);
+
+/* HADITH MANAGEMENT */
+function resetHadithForm() {
+  $("hadithForm").reset();
+  $("hadithId").value = "";
+  $("hadithActive").value = "true";
+  $("hadithFormTitle").textContent = "নতুন হাদিস যোগ করুন";
+  $("saveHadithBtn").textContent = "Save Hadith";
+  $("cancelHadithEdit").classList.add("hidden");
+}
+$("cancelHadithEdit").addEventListener("click",resetHadithForm);
+
+$("hadithForm").addEventListener("submit",async event => {
+  event.preventDefault();
+  try {
+    requireAdmin();
+    const id = $("hadithId").value;
+    const payload = {
+      title:$("hadithTitle").value.trim(),
+      arabic:$("hadithArabic").value.trim(),
+      transliteration:$("hadithTransliteration").value.trim(),
+      englishPronunciation:$("hadithEnglishPronunciation").value.trim(),
+      translation:$("hadithTranslation").value.trim(),
+      explanation:$("hadithExplanation").value.trim(),
+      lesson:$("hadithLesson").value.trim(),
+      source:$("hadithSource").value.trim(),
+      hadithNumber:$("hadithNumber").value.trim(),
+      active:$("hadithActive").value==="true",
+      updatedAt:serverTimestamp()
+    };
+
+    if (!payload.arabic || !payload.translation) {
+      throw new Error("আরবি ও বাংলা অনুবাদ পূরণ করো।");
+    }
+
+    $("saveHadithBtn").disabled = true;
+    if (id) {
+      await updateDoc(doc(db,"hadiths",id),payload);
+      showMessage("হাদিস আপডেট হয়েছে।","success");
+    } else {
+      payload.createdAt = serverTimestamp();
+      await addDoc(collection(db,"hadiths"),payload);
+      showMessage("নতুন হাদিস যোগ হয়েছে।","success");
+    }
+
+    resetHadithForm();
+    await Promise.all([loadHadiths(),loadDashboard()]);
+  } catch (error) {
+    showMessage("হাদিস সংরক্ষণ হয়নি: "+errorText(error),"error");
+  } finally {
+    $("saveHadithBtn").disabled = false;
+  }
+});
+
+async function loadHadiths() {
+  requireAdmin();
+  const box = $("hadithList");
+  box.textContent = "হাদিস লোড হচ্ছে…";
+
+  try {
+    const items = await getCollectionDocs("hadiths");
+    if (!items.length) {
+      box.textContent = "কোনো হাদিস পাওয়া যায়নি।";
+      return;
+    }
+
+    box.innerHTML = items.map(item => `
+      <article class="item">
+        <strong>${escapeHtml(item.title||"হাদিস")}</strong>
+        <p dir="rtl">${escapeHtml(item.arabic||"")}</p>
+        <p>${escapeHtml(item.translation||"")}</p>
+        <small>সূত্র: ${escapeHtml(item.source||"উল্লেখ নেই")}
+          · নম্বর: ${escapeHtml(item.hadithNumber||"—")}
+          · ${item.active===false?"নিষ্ক্রিয়":"সক্রিয়"}</small>
+        <div class="actions">
+          <button class="btn-small" data-edit-hadith="${escapeHtml(item.id)}">Edit</button>
+          <button class="btn-small btn-gold" data-toggle-hadith="${escapeHtml(item.id)}">
+            ${item.active===false?"Activate":"Deactivate"}
+          </button>
+          <button class="btn-small btn-danger" data-delete-hadith="${escapeHtml(item.id)}">Delete</button>
+        </div>
+      </article>`).join("");
+
+    box.querySelectorAll("[data-edit-hadith]").forEach(button => {
+      button.addEventListener("click",() => {
+        const item = items.find(x=>x.id===button.dataset.editHadith);
+        if (!item) return;
+        $("hadithId").value = item.id;
+        $("hadithTitle").value = item.title||"";
+        $("hadithArabic").value = item.arabic||"";
+        $("hadithTransliteration").value = item.transliteration||"";
+        $("hadithEnglishPronunciation").value = item.englishPronunciation||"";
+        $("hadithTranslation").value = item.translation||"";
+        $("hadithExplanation").value = item.explanation||"";
+        $("hadithLesson").value = item.lesson||"";
+        $("hadithSource").value = item.source||"";
+        $("hadithNumber").value = item.hadithNumber||"";
+        $("hadithActive").value = item.active===false?"false":"true";
+        $("hadithFormTitle").textContent = "হাদিস সম্পাদনা";
+        $("saveHadithBtn").textContent = "Update Hadith";
+        $("cancelHadithEdit").classList.remove("hidden");
+        $("hadithForm").scrollIntoView({behavior:"smooth"});
+      });
+    });
+
+    box.querySelectorAll("[data-toggle-hadith]").forEach(button => {
+      button.addEventListener("click",async () => {
+        const item = items.find(x=>x.id===button.dataset.toggleHadith);
+        if (!item) return;
+        try {
+          requireAdmin();
+          await updateDoc(doc(db,"hadiths",item.id),{
+            active:item.active===false,
+            updatedAt:serverTimestamp()
+          });
+          showMessage("হাদিসের অবস্থা পরিবর্তন হয়েছে।","success");
+          await Promise.all([loadHadiths(),loadDashboard()]);
+        } catch (error) {
+          showMessage("হাদিস আপডেট হয়নি: "+errorText(error),"error");
+        }
+      });
+    });
+
+    box.querySelectorAll("[data-delete-hadith]").forEach(button => {
+      button.addEventListener("click",async () => {
+        if (!confirm("এই হাদিসটি স্থায়ীভাবে মুছে ফেলবে?")) return;
+        try {
+          requireAdmin();
+          await deleteDoc(doc(db,"hadiths",button.dataset.deleteHadith));
+          showMessage("হাদিস মুছে ফেলা হয়েছে।","success");
+          await Promise.all([loadHadiths(),loadDashboard()]);
+        } catch (error) {
+          showMessage("হাদিস মুছতে সমস্যা: "+errorText(error),"error");
+        }
+      });
+    });
+  } catch (error) {
+    box.textContent = "হাদিস লোড করা যায়নি: "+errorText(error);
+  }
+}
+$("reloadHadiths").addEventListener("click",loadHadiths);
+</script>
+</body>
+</html>
