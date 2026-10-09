@@ -1,0 +1,699 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>কোরআন লাইব্রেরি | Qalb-e-Deen</title>
+
+  <meta name="description" content="Qalb-e-Deen Quran PDF Library — কোরআন পড়ুন, PDF খুলুন ও ডাউনলোড করুন।">
+  <meta name="theme-color" content="#0b6b50">
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./logo.png" type="image/png">
+
+  <style>
+    :root {
+      --bg: #071c18;
+      --surface: #102923;
+      --surface2: #15382f;
+      --green: #0b6b50;
+      --green-light: #20b889;
+      --gold: #e9c779;
+      --text: #f4f8f5;
+      --muted: #b2c7bd;
+      --border: rgba(255,255,255,.10);
+      --danger: #ffb4a9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at top, rgba(11,107,80,.28), transparent 48%),
+        var(--bg);
+      font-family: system-ui, -apple-system, "Noto Sans Bengali",
+        "Noto Sans", sans-serif;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    .container {
+      width: min(1050px, 92%);
+      margin: auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(7,28,24,.88);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: 43px;
+      height: 43px;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-weight: 400;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .back {
+      border: 1px solid var(--border);
+      padding: 9px 13px;
+      border-radius: 12px;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 42px 0 28px;
+    }
+
+    .hero-icon {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 17px;
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #176d52, #0b3328);
+      border: 1px solid rgba(233,199,121,.32);
+      font-size: 38px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(27px, 5vw, 40px);
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 600px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .bismillah {
+      margin-top: 19px;
+      color: var(--gold);
+      font-size: clamp(23px, 5vw, 32px);
+      line-height: 1.8;
+    }
+
+    .search-area {
+      margin: 10px 0 24px;
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 15px;
+    }
+
+    .search span {
+      font-size: 20px;
+    }
+
+    .search input {
+      width: 100%;
+      min-width: 0;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      padding: 10px 0;
+      color: var(--text);
+    }
+
+    .search input::placeholder {
+      color: #91a99e;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 24px 0 15px;
+    }
+
+    .section-heading h2 {
+      font-size: 19px;
+      margin: 0;
+    }
+
+    .count {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .book-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+      gap: 16px;
+      padding-bottom: 28px;
+    }
+
+    .book-card {
+      background: linear-gradient(145deg, var(--surface2), var(--surface));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      box-shadow: 0 12px 30px rgba(0,0,0,.12);
+    }
+
+    .book-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .book-icon {
+      width: 58px;
+      height: 66px;
+      flex: 0 0 58px;
+      display: grid;
+      place-items: center;
+      background: rgba(233,199,121,.12);
+      border: 1px solid rgba(233,199,121,.25);
+      border-radius: 14px;
+      font-size: 30px;
+    }
+
+    .book-card h3 {
+      margin: 2px 0 8px;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .book-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .tag {
+      display: inline-block;
+      width: fit-content;
+      margin-top: 11px;
+      padding: 5px 9px;
+      border-radius: 8px;
+      color: #b8f4d9;
+      background: rgba(32,184,137,.11);
+      font-size: 11px;
+    }
+
+    .book-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 43px;
+      padding: 10px 13px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      transition: transform .15s, opacity .15s;
+    }
+
+    .btn:active {
+      transform: scale(.97);
+    }
+
+    .btn-primary {
+      color: white;
+      background: var(--green);
+      border-color: transparent;
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255,255,255,.04);
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      padding: 26px;
+      text-align: center;
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      color: var(--muted);
+    }
+
+    .reader {
+      display: none;
+      margin: 5px 0 35px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--surface);
+      scroll-margin-top: 90px;
+    }
+
+    .reader.visible {
+      display: block;
+    }
+
+    .reader-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .reader-header h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .reader-header .book-actions {
+      margin: 0;
+    }
+
+    .pdf-frame {
+      display: block;
+      width: 100%;
+      height: min(75vh, 850px);
+      min-height: 450px;
+      border: 0;
+      background: white;
+    }
+
+    .reader-note {
+      margin: 0;
+      padding: 13px 15px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .notice {
+      display: none;
+      margin: 12px 0;
+      padding: 13px;
+      border: 1px solid rgba(255,180,169,.25);
+      border-radius: 12px;
+      color: var(--danger);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    footer {
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding: 24px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    @media (max-width: 480px) {
+      .nav {
+        min-height: 64px;
+      }
+
+      .brand img {
+        width: 36px;
+        height: 36px;
+      }
+
+      .brand {
+        font-size: 13px;
+        gap: 8px;
+      }
+
+      .back {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .hero {
+        padding-top: 32px;
+      }
+
+      .book-card {
+        padding: 16px;
+      }
+
+      .book-actions .btn {
+        flex: 1 1 auto;
+      }
+
+      .pdf-frame {
+        min-height: 400px;
+        height: 68vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="./index.html">
+        <img
+          src="./logo.png"
+          alt="Qalb-e-Deen Logo"
+          onerror="this.style.display='none'"
+        >
+        <span>
+          Qalb-e-Deen
+          <small>The Heart of Deen</small>
+        </span>
+      </a>
+
+      <a class="back" href="./index.html">← হোমপেজ</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-icon" aria-hidden="true">📖</div>
+      <h1>আল-কোরআন লাইব্রেরি</h1>
+      <p>
+        পবিত্র কোরআন পড়ুন, PDF নতুন ট্যাবে খুলুন অথবা আপনার
+        ডিভাইসে ডাউনলোড করুন।
+      </p>
+      <div class="bismillah" lang="ar" dir="rtl">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+      </div>
+    </section>
+
+    <section class="search-area" aria-label="কোরআন PDF খুঁজুন">
+      <label class="search">
+        <span aria-hidden="true">🔎</span>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="কোরআনের PDF খুঁজুন..."
+          autocomplete="off"
+          aria-label="কোরআনের PDF খুঁজুন"
+        >
+      </label>
+    </section>
+
+    <div class="section-heading">
+      <h2>📚 আমার কোরআন সংগ্রহ</h2>
+      <span class="count" id="bookCount">১টি PDF</span>
+    </div>
+
+    <div class="notice" id="fileNotice" role="alert"></div>
+
+    <section class="book-list" id="bookList" aria-live="polite">
+      <!-- PDF cards will be generated here -->
+    </section>
+
+    <section class="reader" id="reader">
+      <div class="reader-header">
+        <h2 id="readerTitle">কোরআন PDF Reader</h2>
+        <div class="book-actions">
+          <a
+            class="btn btn-secondary"
+            id="readerNewTab"
+            href="#"
+            target="_blank"
+            rel="noopener"
+          >↗ নতুন ট্যাবে খুলুন</a>
+
+          <button
+            class="btn btn-secondary"
+            id="closeReader"
+            type="button"
+          >✕ বন্ধ</button>
+        </div>
+      </div>
+
+      <iframe
+        class="pdf-frame"
+        id="pdfFrame"
+        title="কোরআন PDF Reader"
+        loading="lazy"
+      ></iframe>
+
+      <p class="reader-note">
+        PDF দেখা না গেলে “নতুন ট্যাবে খুলুন” বাটনে চাপ দিন।
+        কিছু মোবাইল ব্রাউজারে PDF সরাসরি দেখানোর সুবিধা সীমিত হতে পারে।
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Qalb-e-Deen — The Heart of Deen</strong><br>
+    কোরআন পড়ুন, জানুন এবং ভালো কাজে এগিয়ে চলুন।<br>
+    © <span id="year"></span> Qalb-e-Deen
+  </footer>
+
+  <script>
+    /*
+      নতুন PDF যোগ করার নিয়ম:
+      BOOKS তালিকায় আরেকটি object যোগ করো।
+      PDF ফাইলটি repository-র root-এ আপলোড করে
+      file-এ হুবহু সঠিক filename লিখবে।
+    */
+
+    const BOOKS = [
+      {
+        id: "quran-arabic-english",
+        title: "আল-কোরআন — Arabic & English Text",
+        description:
+          "আরবি মূল পাঠ ও ইংরেজি পাঠসহ কোরআনের PDF সংস্করণ।",
+        file: "./Quranpdfhub-Arabic-English-Text-Quran.pdf",
+        language: "Arabic + English"
+      }
+    ];
+
+    const bookList = document.getElementById("bookList");
+    const searchInput = document.getElementById("searchInput");
+    const bookCount = document.getElementById("bookCount");
+    const reader = document.getElementById("reader");
+    const readerTitle = document.getElementById("readerTitle");
+    const pdfFrame = document.getElementById("pdfFrame");
+    const readerNewTab = document.getElementById("readerNewTab");
+    const fileNotice = document.getElementById("fileNotice");
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    function showNotice(message) {
+      fileNotice.textContent = message;
+      fileNotice.style.display = "block";
+    }
+
+    function hideNotice() {
+      fileNotice.textContent = "";
+      fileNotice.style.display = "none";
+    }
+
+    function makeButton(label, className, onClick) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "btn " + className;
+      button.textContent = label;
+      button.addEventListener("click", onClick);
+      return button;
+    }
+
+    function openReader(book) {
+      hideNotice();
+
+      const pdfUrl = new URL(book.file, window.location.href);
+      const sameOrigin = pdfUrl.origin === window.location.origin;
+
+      if (!sameOrigin) {
+        showNotice("PDF ফাইলের ঠিকানা সঠিক নয়। ফাইলের পথ পরীক্ষা করো।");
+        return;
+      }
+
+      readerTitle.textContent = book.title;
+      readerNewTab.href = pdfUrl.href;
+
+      // Reload the viewer with the selected PDF.
+      pdfFrame.src = pdfUrl.href + "#toolbar=1&navpanes=0&view=FitH";
+
+      reader.classList.add("visible");
+      reader.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    function downloadBook(book) {
+      hideNotice();
+
+      const pdfUrl = new URL(book.file, window.location.href);
+
+      if (pdfUrl.origin !== window.location.origin) {
+        showNotice("PDF ফাইলের ঠিকানা সঠিক নয়।");
+        return;
+      }
+
+      const link = document.createElement("a");
+      link.href = pdfUrl.href;
+      link.download = book.file.split("/").pop();
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    function renderBooks(query = "") {
+      const normalizedQuery = query.trim().toLowerCase();
+
+      const filteredBooks = BOOKS.filter(book => {
+        const searchable =
+          book.title + " " +
+          book.description + " " +
+          book.language;
+
+        return searchable.toLowerCase().includes(normalizedQuery);
+      });
+
+      bookList.replaceChildren();
+
+      bookCount.textContent =
+        filteredBooks.length + "টি PDF";
+
+      if (filteredBooks.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "কোনো PDF পাওয়া যায়নি। অন্য শব্দ দিয়ে খুঁজুন।";
+        bookList.appendChild(empty);
+        return;
+      }
+
+      filteredBooks.forEach(book => {
+        const card = document.createElement("article");
+        card.className = "book-card";
+
+        const top = document.createElement("div");
+        top.className = "book-top";
+
+        const icon = document.createElement("div");
+        icon.className = "book-icon";
+        icon.textContent = "📗";
+        icon.setAttribute("aria-hidden", "true");
+
+        const details = document.createElement("div");
+
+        const title = document.createElement("h3");
+        title.textContent = book.title;
+
+        const description = document.createElement("p");
+        description.textContent = book.description;
+
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = book.language;
+
+        details.append(title, description, tag);
+        top.append(icon, details);
+
+        const actions = document.createElement("div");
+        actions.className = "book-actions";
+
+        actions.appendChild(
+          makeButton("📖 কোরআন পড়ুন", "btn-primary", () => {
+            openReader(book);
+          })
+        );
+
+        const newTab = document.createElement("a");
+        newTab.className = "btn btn-secondary";
+        newTab.textContent = "↗ নতুন ট্যাব";
+        newTab.href = book.file;
+        newTab.target = "_blank";
+        newTab.rel = "noopener";
+        actions.appendChild(newTab);
+
+        actions.appendChild(
+          makeButton("⬇ ডাউনলোড", "btn-secondary", () => {
+            downloadBook(book);
+          })
+        );
+
+        card.append(top, actions);
+        bookList.appendChild(card);
+      });
+    }
+
+    document.getElementById("closeReader").addEventListener("click", () => {
+      reader.classList.remove("visible");
+      pdfFrame.src = "about:blank";
+    });
+
+    searchInput.addEventListener("input", () => {
+      renderBooks(searchInput.value);
+    });
+
+    renderBooks();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+          .catch(error => {
+            console.warn("Service Worker registration failed:", error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>
