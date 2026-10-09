@@ -3,141 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta name="theme-color" content="#063d30">
+  <meta name="description" content="Qalb-e-Deen — The Heart of Deen। কোরআন, হাদিস ও ইসলামিক জ্ঞান সহজ বাংলায় জানুন।">
   <title>Qalb-e-Deen — The Heart of Deen</title>
-
-  <meta name="description"
-    content="Qalb-e-Deen হলো কোরআন, হাদিস, ইসলামিক জ্ঞান এবং দৈনন্দিন ইবাদতের তথ্য জানার একটি বাংলা ইসলামিক প্ল্যাটফর্ম।">
-
-  <meta name="google-adsense-account"
-    content="ca-pub-5749498815321682">
-
-  <meta name="theme-color" content="#064e3b">
-
-  <script async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5749498815321682"
-    crossorigin="anonymous"></script>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f8f5;
-      color: #19352b;
-      line-height: 1.8;
-    }
-
-    header {
-      background: #064e3b;
-      color: white;
-      text-align: center;
-      padding: 35px 18px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 32px;
-    }
-
-    header p {
-      margin-bottom: 0;
-      color: #e1f5e9;
-    }
-
-    main {
-      max-width: 850px;
-      margin: 25px auto;
-      padding: 0 16px;
-    }
-
-    section {
-      background: white;
-      padding: 22px;
-      margin-bottom: 18px;
-      border-radius: 15px;
-      border: 1px solid #dce8df;
-    }
-
-    h2 {
-      color: #064e3b;
-      margin-top: 0;
-    }
-
-    .button {
-      display: inline-block;
-      background: #064e3b;
-      color: white;
-      padding: 11px 18px;
-      border-radius: 9px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    footer {
-      text-align: center;
-      background: #033b2d;
-      color: white;
-      padding: 20px;
-    }
-
-    footer a {
-      color: #f4d77b;
-    }
+    :root{--green:#063d30;--green2:#0c6048;--gold:#d8b66a;--ink:#17352b;--muted:#60746b;--cream:#f6f7f0;--white:#fff}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--cream);color:var(--ink);font-family:'Hind Siliguri',sans-serif;line-height:1.75}
+    a{color:inherit;text-decoration:none}
+    .topbar{background:#032b22;color:#e7f3ed;text-align:center;padding:7px 14px;font-size:13px}
+    header{background:linear-gradient(125deg,#052f25,#0b5a43);color:#fff;position:relative;overflow:hidden}
+    header:before,header:after{content:"";position:absolute;border:1px solid rgba(216,182,106,.22);border-radius:50%;width:330px;height:330px;pointer-events:none}
+    header:before{right:-110px;top:-190px}header:after{left:-180px;bottom:-260px;width:430px;height:430px}
+    nav{max-width:1120px;margin:auto;padding:17px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px;position:relative;z-index:1}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+    .logo{width:44px;height:44px;border:1px solid var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold);font-family:Amiri,serif;font-size:27px}
+    .navlinks{display:flex;gap:22px;font-size:14px;color:#e0eee7}
+    .navlinks a:hover{color:var(--gold)}
+    .hero{max-width:1120px;margin:auto;padding:65px 22px 78px;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:38px;position:relative;z-index:1}
+    .eyebrow{color:var(--gold);font-weight:600;letter-spacing:.3px}
+    h1{font-size:clamp(38px,5.5vw,64px);line-height:1.2;margin:12px 0 18px;letter-spacing:-.5px}
+    .hero p{color:#d9e9e1;max-width:610px;font-size:18px;margin:0 0 27px}
+    .actions{display:flex;flex-wrap:wrap;gap:12px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:12px;font-weight:700;transition:transform .2s,background .2s}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-gold{background:var(--gold);color:#17392d}
+    .btn-outline{border:1px solid rgba(255,255,255,.5);color:#fff}
+    .hero-art{min-height:280px;display:grid;place-items:center}
+    .ornament{width:min(100%,330px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(216,182,106,.65);display:grid;place-items:center;position:relative;background:radial-gradient(circle,rgba(255,255,255,.07),transparent 65%)}
+    .ornament:before,.ornament:after{content:"";position:absolute;inset:17px;border:1px dashed rgba(216,182,106,.4);border-radius:50%}
+    .ornament:after{inset:35px;border-style:solid;transform:rotate(45deg);border-radius:34%}
+    .arabic{text-align:center;font-family:Amiri,serif;font-size:58px;color:#f0d48d;line-height:1.4;position:relative;z-index:1}
+    .arabic small{display:block;font-family:'Hind Siliguri',sans-serif;font-size:14px;color:#dcebe3;margin-top:7px}
+    main{max-width:1120px;margin:auto;padding:0 22px}
+    .intro{text-align:center;padding:53px 0 24px}
+    .intro h2,.section-heading h2{font-size:clamp(27px,3vw,36px);margin:0 0 8px;color:var(--green)}
+    .intro p{color:var(--muted);max-width:650px;margin:0 auto}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:25px 0 58px}
+    .feature{background:#fff;border:1px solid #e3e9df;border-radius:18px;padding:25px;box-shadow:0 8px 28px rgba(18,54,39,.04)}
+    .feature-icon{width:50px;height:50px;border-radius:15px;background:#eaf3eb;display:grid;place-items:center;font-size:25px;margin-bottom:14px}
+    .feature h3{margin:0 0 7px;color:var(--green);font-size:21px}
+    .feature p{margin:0 0 15px;color:var(--muted);font-size:15px}
+    .text-link{color:var(--green2);font-weight:700}
+    .quote{background:#e9efe5;border:1px solid #dce6d7;border-radius:20px;padding:30px;text-align:center;margin-bottom:55px}
+    .quote .arabic-quote{font-family:Amiri,serif;font-size:30px;color:var(--green);margin:0 0 8px}
+    .quote p{margin:0;color:#5b7165}
+    .section-heading{text-align:center;margin-bottom:22px}
+    .section-heading p{color:var(--muted);margin:0}
+    .about{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;margin-bottom:58px}
+    .about-panel{background:#fff;border:1px solid #e3e9df;border-radius:18px;padding:27px}
+    .about-panel h3{color:var(--green);margin:0 0 10px;font-size:23px}
+    .about-panel p{margin:0;color:var(--muted)}
+    .about-list{list-style:none;padding:0;margin:0}
+    .about-list li{padding:10px 0;border-bottom:1px solid #edf0e9}
+    .about-list li:last-child{border:0}
+    .about-list span{color:var(--green2);font-weight:700;margin-right:8px}
+    .cta{background:linear-gradient(120deg,#063d30,#0b6047);color:#fff;text-align:center;padding:35px 22px;border-radius:22px;margin-bottom:55px}
+    .cta h2{font-size:30px;margin:0 0 8px}.cta p{color:#d7e9df;margin:0 auto 20px;max-width:620px}
+    footer{background:#032b22;color:#d9e9e1;padding:28px 22px;text-align:center}
+    footer strong{color:#fff}footer p{margin:5px 0;font-size:14px}
+    @media(max-width:760px){.navlinks{gap:12px;font-size:13px}.navlinks a:nth-child(2){display:none}.hero{grid-template-columns:1fr;padding-top:43px;padding-bottom:48px;gap:12px}.hero-art{min-height:220px}.ornament{width:220px}.arabic{font-size:45px}.features{grid-template-columns:1fr;margin-bottom:38px}.intro{padding-top:40px}.about{grid-template-columns:1fr}.quote{padding:22px 16px}.quote .arabic-quote{font-size:25px}}
+    @media(max-width:420px){nav{padding:13px 16px}.brand{font-size:17px}.logo{width:39px;height:39px}.navlinks a:nth-child(3){display:none}.hero{padding-left:18px;padding-right:18px}main{padding:0 16px}h1{font-size:39px}.hero p{font-size:16px}}
   </style>
 </head>
-
 <body>
+  <div class="topbar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ · আল্লাহর নামে, যিনি পরম করুণাময়, অতি দয়ালু</div>
   <header>
-    <h1>Qalb-e-Deen</h1>
-    <p>The Heart of Deen — হৃদয়ে ইসলামের আলো</p>
+    <nav aria-label="প্রধান নেভিগেশন">
+      <a class="brand" href="#home"><span class="logo" aria-hidden="true">ق</span><span>Qalb-e-Deen</span></a>
+      <div class="navlinks"><a href="#home">হোম</a><a href="#features">আমাদের সেবা</a><a href="#about">আমাদের সম্পর্কে</a></div>
+    </nav>
+    <div class="hero" id="home">
+      <div>
+        <div class="eyebrow">THE HEART OF DEEN</div>
+        <h1>হৃদয়ে ইসলামের আলো</h1>
+        <p>কোরআন, হাদিস ও ইসলামিক জ্ঞান জানার একটি বাংলা প্ল্যাটফর্ম। সহজ ভাষায় উপকারী জ্ঞান পড়ুন, শিখুন এবং জীবনে কাজে লাগান।</p>
+        <div class="actions">
+          <a class="btn btn-gold" href="https://wwwpan206mr-bot.github.io/qalb-e-deen/">মূল ওয়েবসাইটে প্রবেশ করুন ↗</a>
+          <a class="btn btn-outline" href="#features">আরও জানুন</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-label="ইসলামিক ক্যালিগ্রাফি">
+        <div class="ornament"><div class="arabic">اقْرَأْ<small>পড়ুন · শিখুন · আমল করুন</small></div></div>
+      </div>
+    </div>
   </header>
-
   <main>
-    <section>
-      <h2>আমাদের সম্পর্কে</h2>
-      <p>
-        Qalb-e-Deen একটি বাংলা ইসলামিক জ্ঞানভিত্তিক প্ল্যাটফর্ম।
-        এখানে পাঠকেরা ইসলামিক শিক্ষা, হাদিস, কোরআন এবং দৈনন্দিন
-        ইবাদত সম্পর্কিত তথ্য পড়তে পারবেন।
-      </p>
-      <p>
-        আমাদের উদ্দেশ্য হলো সহজ ভাষায় ইসলামিক জ্ঞান পাঠকের কাছে
-        পৌঁছে দেওয়া এবং উপকারী শিক্ষামূলক পোস্ট পড়ার সুযোগ তৈরি করা।
-      </p>
-      <a class="button"
-        href="https://wwwpan206mr-bot.github.io/qalb-e-deen/">
-        মূল ওয়েবসাইট দেখুন
-      </a>
+    <section class="intro" id="features">
+      <h2>জ্ঞান ও আমলের পথে</h2>
+      <p>দৈনন্দিন জীবনে ইসলাম সম্পর্কে জানতে এবং উপকারী বিষয় পড়তে Qalb-e-Deen-এর সঙ্গে থাকুন।</p>
     </section>
-
-    <section>
-      <h2>ইসলামিক পোস্ট ও শিক্ষা</h2>
-      <p>
-        আমাদের মূল ওয়েবসাইটে প্রকাশিত ইসলামিক পোস্টের মাধ্যমে
-        বিভিন্ন শিক্ষামূলক বিষয় পড়তে পারবেন। হাদিসের অনুবাদ,
-        ব্যাখ্যা এবং অন্যান্য বিষয়বস্তু প্রকাশের ক্ষেত্রে নির্ভরযোগ্য
-        সূত্র ব্যবহারের ওপর গুরুত্ব দেওয়া হয়।
-      </p>
+    <section class="features" aria-label="ওয়েবসাইটের বিষয়সমূহ">
+      <article class="feature"><div class="feature-icon" aria-hidden="true">📖</div><h3>আল-কোরআন</h3><p>কোরআন পাঠ ও অধ্যয়নের জন্য আমাদের মূল ওয়েবসাইটে যান।</p><a class="text-link" href="https://wwwpan206mr-bot.github.io/qalb-e-deen/">কোরআন বিভাগ দেখুন ↗</a></article>
+      <article class="feature"><div class="feature-icon" aria-hidden="true">☪</div><h3>হাদিস ও শিক্ষা</h3><p>হাদিস, অনুবাদ এবং ইসলামিক শিক্ষামূলক পোস্ট পড়ুন।</p><a class="text-link" href="https://wwwpan206mr-bot.github.io/qalb-e-deen/">পোস্ট পড়ুন ↗</a></article>
+      <article class="feature"><div class="feature-icon" aria-hidden="true">🌙</div><h3>দৈনন্দিন ইবাদত</h3><p>ইবাদত ও ইসলামি জীবনযাপন সম্পর্কে উপকারী তথ্য খুঁজুন।</p><a class="text-link" href="https://wwwpan206mr-bot.github.io/qalb-e-deen/">আরও জানুন ↗</a></article>
     </section>
-
-    <section>
-      <h2>যোগাযোগ ও মতামত</h2>
-      <p>
-        ওয়েবসাইটের বিষয়বস্তু সম্পর্কে মতামত বা সংশোধনের পরামর্শ
-        থাকলে মূল ওয়েবসাইটের মাধ্যমে আমাদের সঙ্গে যোগাযোগ করুন।
-      </p>
+    <section class="quote">
+      <p class="arabic-quote" lang="ar" dir="rtl">وَقُل رَّبِّ زِدْنِي عِلْمًا</p>
+      <p>“হে আমার রব, আমার জ্ঞান বৃদ্ধি করুন।” — সূরা ত্ব-হা, ২০:১১৪</p>
+    </section>
+    <section id="about" class="about">
+      <div class="about-panel"><h3>Qalb-e-Deen সম্পর্কে</h3><p>Qalb-e-Deen — The Heart of Deen একটি বাংলা ইসলামিক জ্ঞানভিত্তিক উদ্যোগ। আমাদের লক্ষ্য হলো সহজ ভাষায় উপকারী ইসলামিক বিষয় পাঠকের কাছে পৌঁছে দেওয়া এবং নির্ভরযোগ্য সূত্রের প্রতি গুরুত্ব রাখা।</p></div>
+      <div class="about-panel"><h3>আমাদের লক্ষ্য</h3><ul class="about-list"><li><span>✓</span>সহজ ভাষায় ইসলামিক জ্ঞান</li><li><span>✓</span>কোরআন ও হাদিস অধ্যয়নে সহায়তা</li><li><span>✓</span>মোবাইল ও কম্পিউটারে ব্যবহারবান্ধব অভিজ্ঞতা</li></ul></div>
+    </section>
+    <section class="cta">
+      <h2>ইসলামিক জ্ঞান অন্বেষণ শুরু করুন</h2>
+      <p>Qalb-e-Deen-এর মূল ওয়েবসাইটে প্রবেশ করে উপলভ্য পোস্ট ও শিক্ষামূলক বিষয় দেখুন।</p>
+      <a class="btn btn-gold" href="https://wwwpan206mr-bot.github.io/qalb-e-deen/">Qalb-e-Deen খুলুন ↗</a>
     </section>
   </main>
-
-  <footer>
-    <p>© 2026 Qalb-e-Deen. All rights reserved.</p>
-    <a href="https://wwwpan206mr-bot.github.io/qalb-e-deen/">
-      Qalb-e-Deen মূল ওয়েবসাইট
-    </a>
-  </footer>
+  <footer><strong>Qalb-e-Deen — The Heart of Deen</strong><p>হৃদয়ে ইসলামের আলো</p><p>© 2026 Qalb-e-Deen. সর্বস্বত্ব সংরক্ষিত।</p></footer>
 </body>
 </html>
