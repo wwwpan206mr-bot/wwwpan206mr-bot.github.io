@@ -86,6 +86,9 @@
       line-height: 1.7;
     }
 
+    .format-tools { display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; margin:14px auto 0; }
+    .format-tools label { font-weight:700; color:#0f766e; }
+    .format-tools select { padding:10px 12px; border:1px solid #cfe2dc; border-radius:10px; background:#fff; color:#173b37; font:inherit; }
     .date-box {
       margin: 18px auto 0;
       display: inline-block;
@@ -263,8 +266,17 @@
         Today's Prayer Times
       </p>
 
-      <div class="date-box" id="todayDate">
-        Loading...
+      <div class="date-box" id="todayDate">Loading...</div>
+      <div class="format-tools">
+        <label for="timeFormat">সময় দেখানোর ধরন / Time format</label>
+        <select id="timeFormat" aria-label="Time format">
+          <option value="12">12-hour (যেমন 2:00 PM)</option>
+          <option value="24">24-hour (যেমন 14:00)</option>
+        </select>
+        <label for="prayerLanguage">ভাষা / Language</label>
+        <select id="prayerLanguage" aria-label="Language">
+          <option value="bn">বাংলা</option><option value="en">English</option><option value="ar">العربية</option>
+        </select>
       </div>
     </section>
 
@@ -371,6 +383,13 @@
       icon: "🌅"
     },
     {
+      key: "Sunrise",
+      bn: "সূর্যোদয়",
+      en: "Sunrise",
+      icon: "🌄",
+      informational: true
+    },
+    {
       key: "Dhuhr",
       bn: "যোহর",
       en: "Dhuhr",
@@ -398,6 +417,7 @@
 
 
   let prayerTimes = {};
+  let currentLanguage = "bn";
   let nextPrayer = null;
   let countdownTimer = null;
 
@@ -451,16 +471,14 @@
 
 
   function formatTime(time) {
-
-    const [h, m] = time.split(":").map(Number);
-
+    if (!time) return "—";
+    const clean = String(time).split(" ")[0];
+    const [h, m] = clean.split(":").map(Number);
     const date = new Date();
-
     date.setHours(h, m, 0, 0);
-
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit"
+    const format = document.getElementById("timeFormat")?.value || "12";
+    return date.toLocaleTimeString(currentLanguage === "bn" ? "bn-BD" : currentLanguage === "ar" ? "ar" : "en-US", {
+      hour: "2-digit", minute: "2-digit", hour12: format === "12"
     });
   }
 
@@ -613,7 +631,7 @@
     let found = null;
 
 
-    for (const prayer of prayers) {
+    for (const prayer of prayers.filter(item => !item.informational)) {
 
       const time = prayerTimes[prayer.key];
 
@@ -793,6 +811,21 @@
 
 
   showDate();
+
+  document.getElementById("timeFormat").addEventListener("change", () => {
+    renderPrayerCards();
+  });
+  document.getElementById("prayerLanguage").addEventListener("change", event => {
+    currentLanguage = event.target.value;
+    renderPrayerCards();
+    showDate();
+    if (nextPrayer) {
+      document.getElementById("nextName").textContent = currentLanguage === "en"
+        ? nextPrayer.en : currentLanguage === "ar"
+        ? ({Fajr:"الفجر",Dhuhr:"الظهر",Asr:"العصر",Maghrib:"المغرب",Isha:"العشاء"}[nextPrayer.key] || nextPrayer.en)
+        : nextPrayer.bn;
+    }
+  });
 
   loadPrayerTimes();
 
