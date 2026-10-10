@@ -718,7 +718,7 @@
       const cloudBooks = snapshot.docs.map(docSnap => {
         const data = docSnap.data();
         const file = data.url || data.file || data.pdfUrl || "";
-        if (!file || !/^https?:\\/\\//i.test(file)) return null;
+        if (!file || !/^https?:\/\//i.test(file)) return null;
         return {
           id: docSnap.id,
           title: data.title || "আল-কোরআন PDF",
