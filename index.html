@@ -744,6 +744,32 @@
     </div>
   </div>
 
+  <script>
+    // Site language selector: Bengali, English and Arabic.
+    const languageText = {
+      bn: {home:"হোম",services:"ইসলামিক সেবা",prayer:"নামাজের সময়",hadith:"আজকের হাদিস",posts:"ইসলামিক পোস্ট",account:"অ্যাকাউন্ট",accountButton:"অ্যাকাউন্ট / Sign in",readHadith:"আজকের হাদিস পড়ুন",viewPosts:"ইসলামিক পোস্ট দেখুন"},
+      en: {home:"Home",services:"Islamic Services",prayer:"Prayer Times",hadith:"Hadith of the Day",posts:"Islamic Posts",account:"My Account",accountButton:"Create Account / Sign in",readHadith:"Read Today's Hadith",viewPosts:"Browse Islamic Posts"},
+      ar: {home:"الرئيسية",services:"الخدمات الإسلامية",prayer:"مواقيت الصلاة",hadith:"حديث اليوم",posts:"منشورات إسلامية",account:"حسابي",accountButton:"إنشاء حساب / دخول",readHadith:"اقرأ حديث اليوم",viewPosts:"تصفح المنشورات"}
+    };
+    const languageSelect = document.getElementById("siteLanguage");
+    function applySiteLanguage(lang) {
+      const dict = languageText[lang] || languageText.bn;
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        if (dict[el.dataset.i18n]) el.textContent = dict[el.dataset.i18n];
+      });
+      const account = document.getElementById("accountLink");
+      if (account) account.textContent = dict.accountButton;
+      const heroButtons = document.querySelectorAll(".hero a.btn");
+      if (heroButtons[0]) heroButtons[0].textContent = dict.readHadith;
+      if (heroButtons[1]) heroButtons[1].textContent = dict.viewPosts;
+      try { localStorage.setItem("qalbLanguage", lang); } catch (_) {}
+    }
+    try { languageSelect.value = localStorage.getItem("qalbLanguage") || "bn"; } catch (_) {}
+    languageSelect.addEventListener("change", () => applySiteLanguage(languageSelect.value));
+    applySiteLanguage(languageSelect.value);
+  </script>
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -753,7 +779,7 @@
 
     // Firebase project configuration
     const firebaseConfig = {
-      apiKey: "PASTE_YOUR_EXISTING_FIREBASE_API_KEY_HERE",
+      apiKey: "AIzaSyC4sRpUYVLURCkbAbfvUccL5n71Dveiik4",
       authDomain: "qalb-e-deen-b765a.firebaseapp.com",
       projectId: "qalb-e-deen-b765a",
       storageBucket: "qalb-e-deen-b765a.firebasestorage.app",
