@@ -729,7 +729,7 @@
       <a href="./cookies.html">Cookie Policy / কুকি নীতি</a>
       <a href="./terms.html">Terms / শর্তাবলি</a>
       <a href="./data-request.html">Data Deletion / তথ্য মুছুন</a>
-      <a href="javascript:void(0)" id="revocation-link" style="display:none" onclick="if(window.googlefc && window.googlefc.callbackQueue){window.googlefc.callbackQueue.push(window.googlefc.showRevocationMessage)}">Privacy & Cookie Settings</a>
+      <a href="javascript:void(0)" id="revocation-link" style="display:none" onclick="if(window.googlefc && typeof window.googlefc.showRevocationMessage === 'function'){window.googlefc.showRevocationMessage()}else{alert('Privacy settings are not available yet. Please try again shortly.')}">Privacy & Cookie Settings</a>
       <a href="./admin.html">Admin Panel</a>
     </div>
 
