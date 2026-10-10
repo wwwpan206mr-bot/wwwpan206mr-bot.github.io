@@ -42,7 +42,7 @@ header{background:#fff;border-bottom:1px solid var(--border);position:sticky;top
 <footer>© <span id="year"></span> Qalb-e-Deen — The Heart of Deen</footer>
 <script>
 "use strict";
-const DISTRICT_API = "https://bdapis.com/api/v1.2/districts";
+const GEO_BASE = "https://unifiedapi.pages.dev/api/geo/v1.0";
 const PRAYER_API = "https://api.aladhan.com/v1/timings";
 const METHOD = 1;
 const prayers = [
@@ -85,8 +85,19 @@ function fillDistricts(){
 }
 async function loadDistricts(){
  try{
-  const r=await fetch(DISTRICT_API);if(!r.ok)throw new Error("District list request failed");
-  const j=await r.json();districts=Array.isArray(j.data)?j.data:(Array.isArray(j)?j:[]);
+  const [districtResponse, divisionResponse]=await Promise.all([
+   fetch(GEO_BASE+"/districts"), fetch(GEO_BASE+"/divisions")
+  ]);
+  if(!districtResponse.ok||!divisionResponse.ok)throw new Error("District list request failed");
+  const districtJson=await districtResponse.json();
+  const divisionJson=await divisionResponse.json();
+  const rawDistricts=Array.isArray(districtJson.data)?districtJson.data:[];
+  const divisions=Array.isArray(divisionJson.data)?divisionJson.data:[];
+  const divisionById=Object.fromEntries(divisions.map(d=>[String(d.id),d.name]));
+  districts=rawDistricts.map(d=>({
+   district:d.name, districtbn:d.bn_name, division:divisionById[String(d.division_id)]||"",
+   coordinates:String(d.lat)+","+String(d.lon)
+  }));
   if(!districts.length)throw new Error("District list is empty");
   const divs=[...new Set(districts.map(divisionName).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
   divisionSelect.innerHTML='<option value="">সব বিভাগ / All divisions</option>';
