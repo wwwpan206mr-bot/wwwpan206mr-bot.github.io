@@ -27,6 +27,18 @@
   <link rel="icon" href="https://raw.githubusercontent.com/wwwpan206mr-bot/qalb-e-deen/main/logo.png">
   <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/wwwpan206mr-bot/qalb-e-deen/main/icon-512.png">
 
+  <!-- Google Privacy & Messaging: show the consent-revocation link only when the API is ready. -->
+  <script>
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({
+      'CONSENT_API_READY': function () {
+        var link = document.getElementById('revocation-link');
+        if (link) link.style.display = 'inline-block';
+      }
+    });
+  </script>
+
   <!-- Google AdSense verification -->
   <script async
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5749498815321682"
@@ -713,6 +725,11 @@
       <a href="./">হোম</a>
       <a href="#today-hadith">হাদিস</a>
       <a href="#posts">পোস্ট</a>
+      <a href="./privacy.html">Privacy Policy / গোপনীয়তা</a>
+      <a href="./cookies.html">Cookie Policy / কুকি নীতি</a>
+      <a href="./terms.html">Terms / শর্তাবলি</a>
+      <a href="./data-request.html">Data Deletion / তথ্য মুছুন</a>
+      <a href="javascript:void(0)" id="revocation-link" style="display:none" onclick="if(window.googlefc && window.googlefc.callbackQueue){window.googlefc.callbackQueue.push(window.googlefc.showRevocationMessage)}">Privacy & Cookie Settings</a>
       <a href="./admin.html">Admin Panel</a>
     </div>
 
