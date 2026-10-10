@@ -503,7 +503,20 @@
     © <span id="year"></span> Qalb-e-Deen
   </footer>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC4sRpUYVLURCkbAbfvUccL5n71Dveiik4",
+      authDomain: "qalb-e-deen-b765a.firebaseapp.com",
+      projectId: "qalb-e-deen-b765a",
+      storageBucket: "qalb-e-deen-b765a.firebasestorage.app",
+      messagingSenderId: "226972777842",
+      appId: "1:226972777842:web:0d1439b9d4dc66d8bfb1eb"
+    };
+    const quranApp = initializeApp(firebaseConfig, "quran-library");
+    const quranDb = getFirestore(quranApp);
     /*
       নতুন PDF যোগ করার নিয়ম:
       BOOKS তালিকায় আরেকটি object যোগ করো।
@@ -511,7 +524,7 @@
       file-এ হুবহু সঠিক filename লিখবে।
     */
 
-    const BOOKS = [
+    const DEFAULT_BOOKS = [
       {
         id: "quran-arabic-english",
         title: "আল-কোরআন — Arabic & English Text",
@@ -521,6 +534,8 @@
         language: "Arabic + English"
       }
     ];
+
+    let BOOKS = [...DEFAULT_BOOKS];
 
     const bookList = document.getElementById("bookList");
     const searchInput = document.getElementById("searchInput");
@@ -620,8 +635,9 @@
 
       bookList.replaceChildren();
 
-      bookCount.textContent =
-        filteredBooks.length + "টি PDF";
+      bookCount.textContent = normalizedQuery
+        ? filteredBooks.length + "টি PDF পাওয়া গেছে"
+        : "মোট " + BOOKS.length + "টি PDF";
 
       if (filteredBooks.length === 0) {
         const empty = document.createElement("div");
@@ -696,6 +712,33 @@
     });
 
     renderBooks();
+
+    // Keep the library and PDF count synced with the admin-managed Firestore collection.
+    onSnapshot(collection(quranDb, "quranPDFs"), snapshot => {
+      const cloudBooks = snapshot.docs.map(docSnap => {
+        const data = docSnap.data();
+        const file = data.url || data.file || data.pdfUrl || "";
+        if (!file || !/^https?:\\/\\//i.test(file)) return null;
+        return {
+          id: docSnap.id,
+          title: data.title || "আল-কোরআন PDF",
+          description: data.description || data.language || "কোরআনের PDF সংস্করণ।",
+          file,
+          language: data.language || "কোরআন PDF"
+        };
+      }).filter(Boolean);
+
+      const knownUrls = new Set(cloudBooks.map(book => book.file));
+      const defaultBooks = DEFAULT_BOOKS.filter(book => !knownUrls.has(book.file));
+      BOOKS = [...cloudBooks, ...defaultBooks];
+      renderBooks(searchInput.value);
+      hideNotice();
+    }, error => {
+      console.error("Quran PDF collection could not be loaded:", error);
+      BOOKS = [...DEFAULT_BOOKS];
+      renderBooks(searchInput.value);
+      showNotice("Firebase থেকে PDF তালিকা লোড করা যায়নি। Firestore Rules-এ quranPDFs-এর public read অনুমতি পরীক্ষা করুন; আপাতত ডিফল্ট PDF দেখানো হচ্ছে।");
+    });
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
