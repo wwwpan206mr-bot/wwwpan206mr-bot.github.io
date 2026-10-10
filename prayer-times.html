@@ -23,6 +23,7 @@ header{background:#fff;border-bottom:1px solid var(--border);position:sticky;top
 <main class="container">
 <section class="hero"><h1>নামাজের সময়সূচি</h1><p>Prayer Times for All Districts of Bangladesh</p><div class="date" id="todayDate">তারিখ লোড হচ্ছে…</div></section>
 <section class="panel">
+<h2 style="margin:0 0 12px;color:var(--green)">📍 আপনার লোকেশন নির্বাচন করুন</h2>
 <div class="controls">
 <div class="field"><label for="divisionSelect">বিভাগ নির্বাচন করুন</label><select id="divisionSelect"><option value="">সব বিভাগ</option></select></div>
 <div class="field"><label for="districtSelect">আপনার জেলা নির্বাচন করুন</label><select id="districtSelect"><option value="">জেলা লোড হচ্ছে…</option></select></div>
@@ -139,8 +140,10 @@ function renderCards(){
   const name=label(p.bn,p.en,p.ar);
   let rangeText="";
   if(!p.info&&end){
-   const endLabel=endKey==="Fajr"?label("পরদিন ফজর","Next Fajr","الفجر التالي"):label(prayers.find(x=>x.key===endKey).bn,prayers.find(x=>x.key===endKey).en,prayers.find(x=>x.key===endKey).ar);
-   rangeText='<div class="range">'+label("ওয়াক্তের সময়সীমা:","Prayer window:","وقت الصلاة:")+' <strong>'+formatTime(start)+' – '+formatTime(end)+'</strong><br><span>'+label("পরবর্তী ওয়াক্ত শুরু হওয়া পর্যন্ত","Until the next prayer begins","حتى بداية الصلاة التالية")+'</span></div>';
+   let displayRange=formatTime(start)+' – '+formatTime(end);
+   if(p.key==="Fajr") displayRange=label("রাত ৪:০০ – সকাল ৬:০০","4:00 AM – 6:00 AM","٤:٠٠ صباحًا – ٦:٠٠ صباحًا");
+   if(p.key==="Dhuhr") displayRange=label("সকাল ১১:০০ – দুপুর ২:০০","11:00 AM – 2:00 PM","١١:٠٠ صباحًا – ٢:٠٠ ظهرًا");
+   rangeText='<div class="range">'+label("ওয়াক্তের সময়সীমা:","Prayer window:","وقت الصلاة:")+' <strong>'+displayRange+'</strong></div>';
   }else if(p.info){rangeText='<div class="range">'+label("ফজরের ওয়াক্ত শেষ","Fajr period ends","نهاية وقت الفجر")+'</div>'}
   card.innerHTML='<div class="prayer-top"><span class="ico">'+p.icon+'</span><div><div class="pname">'+name+'</div><div class="en">'+(lang()==="bn"?p.en:lang()==="ar"?p.en:p.bn)+'</div></div></div><div class="actual">'+formatTime(start)+'</div><div class="range">'+label("ওয়াক্ত শুরু","Prayer begins","بداية الوقت")+': <strong>'+formatTime(start)+'</strong></div>'+rangeText;
   grid.appendChild(card);
