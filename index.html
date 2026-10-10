@@ -131,6 +131,8 @@
       font-size: 11px;
     }
 
+    .header-tools { min-width: 0; }
+
     .menu-btn {
       border: 0;
       background: var(--green);
@@ -522,6 +524,8 @@
     }
 
     @media (max-width: 360px) {
+      .header-tools select { max-width: 86px !important; padding: 6px !important; }
+      #accountLink { font-size: 11px !important; padding: 7px !important; }
       .brand-name {
         font-size: 16px;
       }
@@ -554,16 +558,23 @@
         </div>
       </a>
 
-      <button class="menu-btn" id="menuBtn"
-        aria-label="মেনু খুলুন" aria-expanded="false">☰</button>
+      <div class="header-tools" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <label for="siteLanguage" class="muted" style="font-size:12px">🌐</label>
+        <select id="siteLanguage" aria-label="Choose language" style="max-width:118px;padding:8px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--green)">
+          <option value="bn">বাংলা</option><option value="en">English</option><option value="ar">العربية</option>
+        </select>
+        <a class="btn btn-green" style="margin:0;padding:8px 10px;font-size:13px" href="./login.html" id="accountLink">অ্যাকাউন্ট / Sign in</a>
+        <button class="menu-btn" id="menuBtn" aria-label="মেনু খুলুন" aria-expanded="false">☰</button>
+      </div>
     </div>
 
     <nav id="mainNav">
-      <a href="#home">হোম</a>
-      <a href="#quick-links">ইসলামিক সেবা</a>
-      <a href="#prayer">নামাজের সময়</a>
-      <a href="#today-hadith">আজকের হাদিস</a>
-      <a href="#posts">ইসলামিক পোস্ট</a>
+      <a href="#home" data-i18n="home">হোম</a>
+      <a href="#quick-links" data-i18n="services">ইসলামিক সেবা</a>
+      <a href="#prayer" data-i18n="prayer">নামাজের সময়</a>
+      <a href="#today-hadith" data-i18n="hadith">আজকের হাদিস</a>
+      <a href="#posts" data-i18n="posts">ইসলামিক পোস্ট</a>
+      <a href="./login.html" data-i18n="account">অ্যাকাউন্ট</a>
       <a href="./admin.html">Admin</a>
     </nav>
   </header>
