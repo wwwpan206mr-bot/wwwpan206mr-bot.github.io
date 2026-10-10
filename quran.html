@@ -556,11 +556,16 @@
     function openReader(book) {
       hideNotice();
 
-      const pdfUrl = new URL(book.file, window.location.href);
-      const sameOrigin = pdfUrl.origin === window.location.origin;
+      let pdfUrl;
+      try {
+        pdfUrl = new URL(book.file, window.location.href);
+      } catch {
+        showNotice("PDF ফাইলের ঠিকানা সঠিক নয়।");
+        return;
+      }
 
-      if (!sameOrigin) {
-        showNotice("PDF ফাইলের ঠিকানা সঠিক নয়। ফাইলের পথ পরীক্ষা করো।");
+      if (!["https:", "http:"].includes(pdfUrl.protocol)) {
+        showNotice("নিরাপত্তার কারণে এই PDF লিংক খোলা যাচ্ছে না।");
         return;
       }
 
@@ -580,10 +585,16 @@
     function downloadBook(book) {
       hideNotice();
 
-      const pdfUrl = new URL(book.file, window.location.href);
-
-      if (pdfUrl.origin !== window.location.origin) {
+      let pdfUrl;
+      try {
+        pdfUrl = new URL(book.file, window.location.href);
+      } catch {
         showNotice("PDF ফাইলের ঠিকানা সঠিক নয়।");
+        return;
+      }
+
+      if (!["https:", "http:"].includes(pdfUrl.protocol)) {
+        showNotice("নিরাপত্তার কারণে এই PDF লিংক ডাউনলোড করা যাচ্ছে না।");
         return;
       }
 
