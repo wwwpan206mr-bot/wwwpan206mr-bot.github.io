@@ -1,835 +1,161 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Prayer Times — Qalb-e-Deen</title>
-
-  <meta
-    name="description"
-    content="Qalb-e-Deen — Today's Islamic prayer times for Dhaka, Bangladesh."
-  >
-
-  <meta name="theme-color" content="#0f766e">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, "Noto Sans Bengali", sans-serif;
-      background:
-        radial-gradient(circle at top, #dff7f1 0%, #f7faf9 45%, #eef5f3 100%);
-      color: #173b37;
-      min-height: 100vh;
-    }
-
-    .container {
-      width: min(1100px, 94%);
-      margin: auto;
-    }
-
-    header {
-      background: rgba(255,255,255,.9);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid #dceae6;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-    }
-
-    .nav {
-      min-height: 68px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .brand {
-      text-decoration: none;
-      color: #0f766e;
-      font-weight: 800;
-      font-size: 20px;
-    }
-
-    .back-btn {
-      text-decoration: none;
-      background: #0f766e;
-      color: white;
-      padding: 10px 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    main {
-      padding: 28px 0 50px;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 25px 10px 30px;
-    }
-
-    .hero h1 {
-      font-size: clamp(28px, 6vw, 46px);
-      margin-bottom: 8px;
-    }
-
-    .hero p {
-      color: #61716e;
-      line-height: 1.7;
-    }
-
-    .format-tools { display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; margin:14px auto 0; }
-    .format-tools label { font-weight:700; color:#0f766e; }
-    .format-tools select { padding:10px 12px; border:1px solid #cfe2dc; border-radius:10px; background:#fff; color:#173b37; font:inherit; }
-    .date-box {
-      margin: 18px auto 0;
-      display: inline-block;
-      padding: 9px 16px;
-      border-radius: 999px;
-      background: #e2f3ef;
-      color: #0f766e;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .next-card {
-      background: linear-gradient(135deg, #0f766e, #115e59);
-      color: white;
-      border-radius: 24px;
-      padding: 25px;
-      box-shadow: 0 15px 35px rgba(15,118,110,.20);
-      margin-bottom: 25px;
-      text-align: center;
-    }
-
-    .next-label {
-      font-size: 14px;
-      opacity: .85;
-      margin-bottom: 8px;
-    }
-
-    .next-name {
-      font-size: 30px;
-      font-weight: 800;
-      margin-bottom: 5px;
-    }
-
-    .next-time {
-      font-size: 17px;
-      opacity: .9;
-    }
-
-    .countdown {
-      margin-top: 16px;
-      font-size: clamp(34px, 9vw, 58px);
-      font-weight: 900;
-      letter-spacing: 2px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 14px;
-    }
-
-    .prayer-card {
-      background: rgba(255,255,255,.94);
-      border: 1px solid #dceae6;
-      border-radius: 20px;
-      padding: 22px 12px;
-      text-align: center;
-      box-shadow: 0 8px 25px rgba(0,0,0,.05);
-      transition: .2s;
-    }
-
-    .prayer-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .prayer-card.active {
-      border: 2px solid #0f766e;
-      background: #e9f8f4;
-      box-shadow: 0 10px 28px rgba(15,118,110,.15);
-    }
-
-    .icon {
-      font-size: 28px;
-      margin-bottom: 9px;
-    }
-
-    .bn-name {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 5px;
-    }
-
-    .en-name {
-      color: #71807d;
-      font-size: 12px;
-      margin-bottom: 12px;
-    }
-
-    .time {
-      font-size: 21px;
-      font-weight: 800;
-      color: #0f766e;
-    }
-
-    .status {
-      margin-top: 8px;
-      font-size: 11px;
-      color: #71807d;
-    }
-
-    .loading,
-    .error {
-      text-align: center;
-      padding: 25px;
-      border-radius: 18px;
-      background: white;
-      margin-bottom: 20px;
-    }
-
-    .error {
-      color: #b42318;
-    }
-
-    .location {
-      margin-top: 25px;
-      padding: 18px;
-      background: white;
-      border: 1px solid #dceae6;
-      border-radius: 18px;
-      text-align: center;
-      color: #657571;
-      line-height: 1.8;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px 10px;
-      color: #7b8986;
-      font-size: 13px;
-    }
-
-    @media (max-width: 850px) {
-      .grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (max-width: 560px) {
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .prayer-card:last-child {
-        grid-column: span 2;
-      }
-
-      .next-card {
-        padding: 22px 15px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>নামাজের সময়সূচি — Qalb-e-Deen</title>
+<meta name="description" content="বাংলাদেশের ৬৪টি জেলার জন্য দৈনিক নামাজের সময়সূচি। নিজের জেলা নির্বাচন করুন।">
+<meta name="theme-color" content="#064e3b">
+<style>
+:root{--green:#064e3b;--green2:#087451;--gold:#d4af37;--bg:#f4f8f5;--text:#19352b;--muted:#64756d;--border:#dce8df}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+header{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}.nav{width:min(1100px,94%);margin:auto;min-height:65px;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-size:20px;font-weight:800;color:var(--green);text-decoration:none}.btn{border:0;border-radius:11px;padding:10px 15px;background:var(--green);color:#fff;text-decoration:none;font:inherit;font-weight:700;cursor:pointer}
+.container{width:min(1050px,92%);margin:auto}.hero{text-align:center;padding:28px 0 18px}.hero h1{margin:0;color:var(--green);font-size:clamp(28px,5vw,42px)}.hero p{color:var(--muted);margin:5px 0 12px}.date{display:inline-block;background:#e3f3e9;color:var(--green);padding:6px 14px;border-radius:99px;font-weight:700}
+.panel{background:white;border:1px solid var(--border);border-radius:18px;padding:18px;margin:16px 0;box-shadow:0 8px 25px rgba(6,78,59,.05)}.controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.field label{display:block;font-weight:700;color:var(--green);margin-bottom:5px}.field select{width:100%;padding:12px;border:1px solid #cbded2;border-radius:11px;background:white;color:var(--text);font:inherit}.help{font-size:13px;color:var(--muted);margin-top:10px}
+.next{background:linear-gradient(135deg,#064e3b,#087451);color:white;border-radius:22px;padding:22px;text-align:center;margin:18px 0}.next .label{opacity:.85}.next .name{font-size:28px;font-weight:800}.next .time{color:#f4d77b;font-size:20px;font-weight:700}.countdown{font-size:clamp(30px,7vw,48px);font-weight:900;color:#f4d77b}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.prayer{background:white;border:1px solid var(--border);border-radius:17px;padding:17px;box-shadow:0 8px 22px rgba(6,78,59,.05)}.prayer.active{border:2px solid var(--green2);background:#edf8f1}.prayer-top{display:flex;align-items:center;gap:10px}.ico{font-size:27px}.pname{font-size:19px;font-weight:800;color:var(--green)}.en{font-size:12px;color:var(--muted)}.actual{font-size:24px;font-weight:900;color:var(--green);margin-top:8px}.range{font-size:14px;margin-top:4px;color:#405b4c}.range strong{color:#087451}.tag{display:inline-block;margin-top:7px;border-radius:99px;padding:2px 9px;background:#edf4ee;color:#4b6656;font-size:12px}
+.status{padding:14px;text-align:center;border-radius:13px;background:white;border:1px solid var(--border);margin:12px 0}.error{color:#a61b1b}.location-note{color:var(--muted);font-size:13px;text-align:center;margin:18px 0}footer{text-align:center;padding:25px 12px;color:var(--muted);font-size:13px}
+@media(max-width:650px){.controls{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.nav{min-height:58px}.brand{font-size:17px}.panel{padding:14px}}
+</style>
 </head>
-
 <body>
-
-<header>
-  <div class="container nav">
-    <a href="index.html" class="brand">
-      ☪ Qalb-e-Deen
-    </a>
-
-    <a href="index.html" class="back-btn">
-      ← Home
-    </a>
-  </div>
-</header>
-
-<main>
-  <div class="container">
-
-    <section class="hero">
-      <h1>নামাজের সময়সূচি</h1>
-
-      <p>
-        Today's Prayer Times
-      </p>
-
-      <div class="date-box" id="todayDate">Loading...</div>
-      <div class="format-tools">
-        <label for="timeFormat">সময় দেখানোর ধরন / Time format</label>
-        <select id="timeFormat" aria-label="Time format">
-          <option value="12">12-hour (যেমন 2:00 PM)</option>
-          <option value="24">24-hour (যেমন 14:00)</option>
-        </select>
-        <label for="prayerLanguage">ভাষা / Language</label>
-        <select id="prayerLanguage" aria-label="Language">
-          <option value="bn">বাংলা</option><option value="en">English</option><option value="ar">العربية</option>
-        </select>
-      </div>
-    </section>
-
-    <div id="loadingBox" class="loading">
-      নামাজের সময়সূচি লোড হচ্ছে...
-    </div>
-
-    <div id="errorBox" class="error" style="display:none;">
-      নামাজের সময়সূচি লোড করা যায়নি।
-    </div>
-
-    <section class="next-card" id="nextCard" style="display:none;">
-      <div class="next-label">
-        পরবর্তী ওয়াক্ত
-      </div>
-
-      <div class="next-name" id="nextName">
-        —
-      </div>
-
-      <div class="next-time" id="nextTime">
-        —
-      </div>
-
-      <div class="countdown" id="countdown">
-        00:00:00
-      </div>
-    </section>
-
-    <section class="grid" id="prayerGrid"></section>
-
-    <div class="location">
-      📍 <strong>Dhaka, Bangladesh</strong>
-      <br>
-      আজকের নামাজের সময়সূচি API থেকে স্বয়ংক্রিয়ভাবে নেওয়া হচ্ছে।
-    </div>
-
-  </div>
+<header><div class="nav"><a class="brand" href="./index.html">☪ Qalb-e-Deen</a><a class="btn" href="./index.html">← হোম</a></div></header>
+<main class="container">
+<section class="hero"><h1>নামাজের সময়সূচি</h1><p>Prayer Times for All Districts of Bangladesh</p><div class="date" id="todayDate">তারিখ লোড হচ্ছে…</div></section>
+<section class="panel">
+<div class="controls">
+<div class="field"><label for="divisionSelect">বিভাগ নির্বাচন করুন</label><select id="divisionSelect"><option value="">সব বিভাগ</option></select></div>
+<div class="field"><label for="districtSelect">আপনার জেলা নির্বাচন করুন</label><select id="districtSelect"><option value="">জেলা লোড হচ্ছে…</option></select></div>
+<div class="field"><label for="timeFormat">সময় দেখানোর ধরন</label><select id="timeFormat"><option value="12">১২ ঘণ্টা (AM/PM)</option><option value="24">২৪ ঘণ্টা</option></select></div>
+</div>
+<div class="controls" style="margin-top:12px;grid-template-columns:repeat(2,minmax(0,1fr))">
+<div class="field"><label for="languageSelect">ভাষা / Language</label><select id="languageSelect"><option value="bn">বাংলা</option><option value="en">English</option><option value="ar">العربية</option></select></div>
+<div class="field"><label for="schoolSelect">ফিকহ পদ্ধতি</label><select id="schoolSelect"><option value="1">হানাফি (Hanafi)</option><option value="0">শাফেয়ি (Shafi)</option></select></div>
+</div>
+<p class="help">জেলা নির্বাচন করলে সেই জেলার অবস্থান অনুযায়ী সময়সূচি লোড হবে। সময়গুলো হিসাবভিত্তিক; স্থানীয় মসজিদ/ইসলামিক কর্তৃপক্ষের সময়ের সঙ্গে সামান্য পার্থক্য হতে পারে।</p>
+</section>
+<div id="status" class="status">জেলার তালিকা লোড হচ্ছে…</div>
+<section class="next" id="nextCard" hidden><div class="label" id="nextLabel">পরবর্তী ওয়াক্ত</div><div class="name" id="nextName">—</div><div class="time" id="nextTime">—</div><div class="countdown" id="countdown">00:00:00</div></section>
+<section class="grid" id="prayerGrid"></section>
+<p class="location-note" id="locationNote">বাংলাদেশের জেলা নির্বাচন করুন।</p>
 </main>
-
-<footer>
-  © <span id="year"></span> Qalb-e-Deen — The Heart of Deen
-</footer>
-
-
-<script type="module">
-
-  /* ==============================
-     FIREBASE CONFIG
-  ============================== */
-
-  import {
-    initializeApp
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-  import {
-    getAuth
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-  import {
-    getFirestore
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyC4sRpUYVLURCkbAbfvUccL5n71Dveiik4",
-    authDomain: "qalb-e-deen-b765a.firebaseapp.com",
-    projectId: "qalb-e-deen-b765a",
-    storageBucket: "qalb-e-deen-b765a.firebasestorage.app",
-    messagingSenderId: "226972777842",
-    appId: "1:226972777842:web:0d1439b9d4dc66d8bfb1eb"
-  };
-
-
-  const app = initializeApp(firebaseConfig);
-
-  const auth = getAuth(app);
-
-  const db = getFirestore(app);
-
-
-  /* ==============================
-     SETTINGS
-  ============================== */
-
-  const CITY = "Dhaka";
-  const COUNTRY = "Bangladesh";
-
-  /*
-    Method 1 = University of Islamic Sciences, Karachi
-
-    School 1 = Hanafi
-  */
-
-  const METHOD = 1;
-  const SCHOOL = 1;
-
-
-  const prayers = [
-    {
-      key: "Fajr",
-      bn: "ফজর",
-      en: "Fajr",
-      icon: "🌅"
-    },
-    {
-      key: "Sunrise",
-      bn: "সূর্যোদয়",
-      en: "Sunrise",
-      icon: "🌄",
-      informational: true
-    },
-    {
-      key: "Dhuhr",
-      bn: "যোহর",
-      en: "Dhuhr",
-      icon: "☀️"
-    },
-    {
-      key: "Asr",
-      bn: "আসর",
-      en: "Asr",
-      icon: "🌤️"
-    },
-    {
-      key: "Maghrib",
-      bn: "মাগরিব",
-      en: "Maghrib",
-      icon: "🌇"
-    },
-    {
-      key: "Isha",
-      bn: "এশা",
-      en: "Isha",
-      icon: "🌙"
-    }
-  ];
-
-
-  let prayerTimes = {};
-  let currentLanguage = "bn";
-  let nextPrayer = null;
-  let countdownTimer = null;
-
-
-  /* ==============================
-     DATE
-  ============================== */
-
-  function getTodayString() {
-
-    const now = new Date();
-
-    const day = String(now.getDate()).padStart(2, "0");
-
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-
-    const year = now.getFullYear();
-
-    return `${day}-${month}-${year}`;
-  }
-
-
-  function showDate() {
-
-    const now = new Date();
-
-    const options = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    };
-
-    document.getElementById("todayDate").textContent =
-      now.toLocaleDateString("bn-BD", options);
-  }
-
-
-  /* ==============================
-     TIME HELPERS
-  ============================== */
-
-  function convertToMinutes(time) {
-
-    const clean = time.split(" ")[0];
-
-    const [hours, minutes] = clean.split(":").map(Number);
-
-    return hours * 60 + minutes;
-  }
-
-
-  function formatTime(time) {
-    if (!time) return "—";
-    const clean = String(time).split(" ")[0];
-    const [h, m] = clean.split(":").map(Number);
-    const date = new Date();
-    date.setHours(h, m, 0, 0);
-    const format = document.getElementById("timeFormat")?.value || "12";
-    return date.toLocaleTimeString(currentLanguage === "bn" ? "bn-BD" : currentLanguage === "ar" ? "ar" : "en-US", {
-      hour: "2-digit", minute: "2-digit", hour12: format === "12"
-    });
-  }
-
-
-  function getPrayerDate(time) {
-
-    const [h, m] = time.split(":").map(Number);
-
-    const date = new Date();
-
-    date.setHours(h, m, 0, 0);
-
-    return date;
-  }
-
-
-  /* ==============================
-     LOAD API
-  ============================== */
-
-  async function loadPrayerTimes() {
-
-    try {
-
-      document.getElementById("loadingBox").style.display = "block";
-
-      document.getElementById("errorBox").style.display = "none";
-
-      const date = getTodayString();
-
-      const url =
-        `https://api.aladhan.com/v1/timingsByCity/${date}` +
-        `?city=${encodeURIComponent(CITY)}` +
-        `&country=${encodeURIComponent(COUNTRY)}` +
-        `&method=${METHOD}` +
-        `&school=${SCHOOL}` +
-        `&iso8601=false`;
-
-
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error("API request failed");
-      }
-
-
-      const result = await response.json();
-
-
-      if (
-        !result ||
-        result.code !== 200 ||
-        !result.data ||
-        !result.data.timings
-      ) {
-        throw new Error("Invalid API response");
-      }
-
-
-      prayerTimes = result.data.timings;
-
-
-      renderPrayerCards();
-
-      findNextPrayer();
-
-      document.getElementById("loadingBox").style.display = "none";
-
-      document.getElementById("nextCard").style.display = "block";
-
-
-    } catch (error) {
-
-      console.error(error);
-
-      document.getElementById("loadingBox").style.display = "none";
-
-      document.getElementById("errorBox").style.display = "block";
-
-    }
-
-  }
-
-
-  /* ==============================
-     RENDER
-  ============================== */
-
-  function renderPrayerCards() {
-
-    const grid = document.getElementById("prayerGrid");
-
-    grid.innerHTML = "";
-
-
-    prayers.forEach(prayer => {
-
-      const time = prayerTimes[prayer.key];
-
-      if (!time) return;
-
-
-      const card = document.createElement("div");
-
-      card.className = "prayer-card";
-
-      card.dataset.key = prayer.key;
-
-
-      card.innerHTML = `
-
-        <div class="icon">
-          ${prayer.icon}
-        </div>
-
-        <div class="bn-name">
-          ${prayer.bn}
-        </div>
-
-        <div class="en-name">
-          ${prayer.en}
-        </div>
-
-        <div class="time">
-          ${formatTime(time)}
-        </div>
-
-        <div class="status">
-          ${prayer.key}
-        </div>
-
-      `;
-
-
-      grid.appendChild(card);
-
-    });
-
-  }
-
-
-  /* ==============================
-     FIND NEXT PRAYER
-  ============================== */
-
-  function findNextPrayer() {
-
-    const now = new Date();
-
-    let found = null;
-
-
-    for (const prayer of prayers.filter(item => !item.informational)) {
-
-      const time = prayerTimes[prayer.key];
-
-      if (!time) continue;
-
-
-      const prayerDate = getPrayerDate(time);
-
-
-      if (prayerDate > now) {
-
-        found = {
-          ...prayer,
-          time,
-          date: prayerDate
-        };
-
-        break;
-
-      }
-
-    }
-
-
-    /*
-      If all five prayers have passed,
-      next prayer becomes tomorrow's Fajr.
-    */
-
-    if (!found) {
-
-      const fajrTime = prayerTimes["Fajr"];
-
-      const fajrDate = getPrayerDate(fajrTime);
-
-      fajrDate.setDate(fajrDate.getDate() + 1);
-
-
-      found = {
-        ...prayers[0],
-        time: fajrTime,
-        date: fajrDate,
-        tomorrow: true
-      };
-
-    }
-
-
-    nextPrayer = found;
-
-
-    document.getElementById("nextName").textContent =
-      `${found.bn} (${found.en})`;
-
-
-    document.getElementById("nextTime").textContent =
-      found.tomorrow
-        ? `আগামীকাল • ${formatTime(found.time)}`
-        : `আজ • ${formatTime(found.time)}`;
-
-
-    highlightNextPrayer();
-
-    updateCountdown();
-
-  }
-
-
-  /* ==============================
-     HIGHLIGHT
-  ============================== */
-
-  function highlightNextPrayer() {
-
-    document
-      .querySelectorAll(".prayer-card")
-      .forEach(card => {
-
-        card.classList.remove("active");
-
-      });
-
-
-    if (!nextPrayer) return;
-
-
-    const activeCard =
-      document.querySelector(
-        `.prayer-card[data-key="${nextPrayer.key}"]`
-      );
-
-
-    if (activeCard) {
-
-      activeCard.classList.add("active");
-
-    }
-
-  }
-
-
-  /* ==============================
-     COUNTDOWN
-  ============================== */
-
-  function updateCountdown() {
-
-    if (!nextPrayer) return;
-
-
-    const now = new Date();
-
-    let difference =
-      nextPrayer.date.getTime() - now.getTime();
-
-
-    if (difference <= 0) {
-
-      findNextPrayer();
-
-      return;
-
-    }
-
-
-    const hours =
-      Math.floor(difference / 3600000);
-
-
-    difference %= 3600000;
-
-
-    const minutes =
-      Math.floor(difference / 60000);
-
-
-    difference %= 60000;
-
-
-    const seconds =
-      Math.floor(difference / 1000);
-
-
-    const formatted =
-      `${String(hours).padStart(2, "0")}:` +
-      `${String(minutes).padStart(2, "0")}:` +
-      `${String(seconds).padStart(2, "0")}`;
-
-
-    document.getElementById("countdown").textContent =
-      formatted;
-
-  }
-
-
-  /* ==============================
-     AUTO REFRESH
-  ============================== */
-
-  setInterval(updateCountdown, 1000);
-
-
-  /*
-    Reload API every 30 minutes
-    so the page stays updated.
-  */
-
-  setInterval(loadPrayerTimes, 30 * 60 * 1000);
-
-
-  /* ==============================
-     START
-  ============================== */
-
-  document.getElementById("year").textContent =
-    new Date().getFullYear();
-
-
-  showDate();
-
-  document.getElementById("timeFormat").addEventListener("change", () => {
-    renderPrayerCards();
-  });
-  document.getElementById("prayerLanguage").addEventListener("change", event => {
-    currentLanguage = event.target.value;
-    renderPrayerCards();
-    showDate();
-    if (nextPrayer) {
-      document.getElementById("nextName").textContent = currentLanguage === "en"
-        ? nextPrayer.en : currentLanguage === "ar"
-        ? ({Fajr:"الفجر",Dhuhr:"الظهر",Asr:"العصر",Maghrib:"المغرب",Isha:"العشاء"}[nextPrayer.key] || nextPrayer.en)
-        : nextPrayer.bn;
-    }
-  });
-
-  loadPrayerTimes();
-
+<footer>© <span id="year"></span> Qalb-e-Deen — The Heart of Deen</footer>
+<script>
+"use strict";
+const DISTRICT_API = "https://bdapis.com/api/v1.2/districts";
+const PRAYER_API = "https://api.aladhan.com/v1/timings";
+const METHOD = 1;
+const prayers = [
+ {key:"Fajr",bn:"ফজর",en:"Fajr",ar:"الفجر",icon:"🌅"},
+ {key:"Sunrise",bn:"সূর্যোদয়",en:"Sunrise",ar:"الشروق",icon:"🌄",info:true},
+ {key:"Dhuhr",bn:"যোহর",en:"Dhuhr",ar:"الظهر",icon:"☀️"},
+ {key:"Asr",bn:"আসর",en:"Asr",ar:"العصر",icon:"🌤️"},
+ {key:"Maghrib",bn:"মাগরিব",en:"Maghrib",ar:"المغرب",icon:"🌇"},
+ {key:"Isha",bn:"এশা",en:"Isha",ar:"العشاء",icon:"🌙"}
+];
+const divisionsBn = {
+ "Barishal":"বরিশাল","Chattogram":"চট্টগ্রাম","Dhaka":"ঢাকা","Khulna":"খুলনা",
+ "Mymensingh":"ময়মনসিংহ","Rajshahi":"রাজশাহী","Rangpur":"রংপুর","Sylhet":"সিলেট"
+};
+const divisionSelect=document.getElementById("divisionSelect");
+const districtSelect=document.getElementById("districtSelect");
+const statusBox=document.getElementById("status");
+const grid=document.getElementById("prayerGrid");
+let districts=[], timings={}, countdownTimer=null, selectedDistrict=null;
+const langNames={bn:"bn-BD",en:"en-US",ar:"ar"};
+function lang(){return document.getElementById("languageSelect").value}
+function label(bn,en,ar){return lang()==="en"?en:lang()==="ar"?ar:bn}
+function dateApi(){const d=new Date();return String(d.getDate()).padStart(2,"0")+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+d.getFullYear()}
+function showDate(){document.getElementById("todayDate").textContent=new Date().toLocaleDateString(langNames[lang()],{weekday:"long",year:"numeric",month:"long",day:"numeric"})}
+function cleanTime(v){return String(v||"").split(" ")[0].trim()}
+function minutes(v){const a=cleanTime(v).split(":").map(Number);return a[0]*60+a[1]}
+function timeDate(v,dayOffset=0){const a=cleanTime(v).split(":").map(Number);const d=new Date();d.setDate(d.getDate()+dayOffset);d.setHours(a[0],a[1],0,0);return d}
+function formatTime(v){if(!v)return "—";const a=cleanTime(v).split(":").map(Number);const d=new Date();d.setHours(a[0],a[1],0,0);return d.toLocaleTimeString(langNames[lang()],{hour:"2-digit",minute:"2-digit",hour12:document.getElementById("timeFormat").value==="12"})}
+function districtName(d){return d.districtbn||d.district||d.name}
+function districtEnglish(d){return d.district||d.name||d.districtbn}
+function divisionName(d){return d.division||d.division_name||""}
+function parseCoords(d){const parts=String(d.coordinates||"").split(",").map(x=>Number(x.trim()));return {lat:parts[0],lon:parts[1]}}
+function fillDistricts(){
+ const division=divisionSelect.value;
+ const list=districts.filter(d=>!division||divisionName(d).toLowerCase()===division.toLowerCase());
+ districtSelect.innerHTML="";
+ list.sort((a,b)=>districtName(a).localeCompare(districtName(b),"bn"));
+ for(const d of list){const opt=document.createElement("option");opt.value=d.district||d.name;opt.textContent=lang()==="en"?districtEnglish(d):lang()==="ar"?districtEnglish(d):districtName(d);districtSelect.appendChild(opt)}
+ if(list.length){districtSelect.value=selectedDistrict?(selectedDistrict.district||selectedDistrict.name):list[0].district||list[0].name;selectedDistrict=list.find(d=>(d.district||d.name)===districtSelect.value)||list[0];}
+}
+async function loadDistricts(){
+ try{
+  const r=await fetch(DISTRICT_API);if(!r.ok)throw new Error("District list request failed");
+  const j=await r.json();districts=Array.isArray(j.data)?j.data:(Array.isArray(j)?j:[]);
+  if(!districts.length)throw new Error("District list is empty");
+  const divs=[...new Set(districts.map(divisionName).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  divisionSelect.innerHTML='<option value="">সব বিভাগ / All divisions</option>';
+  divs.forEach(d=>{const o=document.createElement("option");o.value=d;o.textContent=divisionsBn[d]||d;divisionSelect.appendChild(o)});
+  // Default to Dhaka district if present; users can select any district.
+  selectedDistrict=districts.find(d=>(d.district||d.name)==="Dhaka")||districts[0];
+  fillDistricts();districtSelect.value=selectedDistrict.district||selectedDistrict.name;
+  await loadPrayerTimes();
+ }catch(e){statusBox.className="status error";statusBox.textContent="জেলার তালিকা লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে পৃষ্ঠা রিফ্রেশ করুন।";console.error(e)}
+}
+async function loadPrayerTimes(){
+ if(!selectedDistrict){statusBox.className="status error";statusBox.textContent="আগে একটি জেলা নির্বাচন করুন।";return}
+ const c=parseCoords(selectedDistrict);
+ if(!Number.isFinite(c.lat)||!Number.isFinite(c.lon)){statusBox.className="status error";statusBox.textContent="এই জেলার অবস্থানের তথ্য পাওয়া যায়নি।";return}
+ statusBox.className="status";statusBox.textContent=label("নামাজের সময়সূচি লোড হচ্ছে…","Loading prayer times…","جارٍ تحميل مواقيت الصلاة…");
+ grid.innerHTML="";
+ try{
+  const school=document.getElementById("schoolSelect").value;
+  const url=PRAYER_API+"/"+dateApi()+"?latitude="+encodeURIComponent(c.lat)+"&longitude="+encodeURIComponent(c.lon)+"&method="+METHOD+"&school="+school+"&timezonestring=Asia%2FDhaka";
+  const r=await fetch(url);if(!r.ok)throw new Error("Prayer API request failed");
+  const j=await r.json();if(j.code!==200||!j.data||!j.data.timings)throw new Error("Invalid prayer API response");
+  timings=j.data.timings;renderCards();updateNextPrayer();
+  const district=lang()==="en"?districtEnglish(selectedDistrict):districtName(selectedDistrict);
+  statusBox.className="status";statusBox.textContent=label("সময়সূচি আপডেট হয়েছে","Prayer times updated","تم تحديث مواقيت الصلاة")+" — "+district;
+  document.getElementById("locationNote").textContent="📍 "+district+", Bangladesh — "+label("জেলার অবস্থান অনুযায়ী দৈনিক সময়","Daily times based on district coordinates","المواقيت اليومية حسب موقع المنطقة");
+ }catch(e){statusBox.className="status error";statusBox.textContent=label("সময়সূচি লোড করা যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন।","Could not load prayer times. Please try again shortly.","تعذر تحميل المواقيت. حاول مرة أخرى لاحقًا.");console.error(e)}
+}
+function renderCards(){
+ grid.innerHTML="";
+ prayers.forEach((p,i)=>{
+  const start=timings[p.key];let endKey=null;
+  if(p.key==="Fajr")endKey="Sunrise";
+  if(p.key==="Dhuhr")endKey="Asr";
+  if(p.key==="Asr")endKey="Maghrib";
+  if(p.key==="Maghrib")endKey="Isha";
+  if(p.key==="Isha")endKey="Fajr";
+  const end=endKey?timings[endKey]:null;
+  const card=document.createElement("article");card.className="prayer";card.dataset.key=p.key;
+  const name=label(p.bn,p.en,p.ar);
+  let rangeText="";
+  if(!p.info&&end){
+   const endLabel=endKey==="Fajr"?label("পরদিন ফজর","Next Fajr","الفجر التالي"):label(prayers.find(x=>x.key===endKey).bn,prayers.find(x=>x.key===endKey).en,prayers.find(x=>x.key===endKey).ar);
+   rangeText='<div class="range">'+label("ওয়াক্তের সময়সীমা:","Prayer window:","وقت الصلاة:")+' <strong>'+formatTime(start)+' – '+formatTime(end)+'</strong><br><span>'+label("পরবর্তী ওয়াক্ত শুরু হওয়া পর্যন্ত","Until the next prayer begins","حتى بداية الصلاة التالية")+'</span></div>';
+  }else if(p.info){rangeText='<div class="range">'+label("ফজরের ওয়াক্ত শেষ","Fajr period ends","نهاية وقت الفجر")+'</div>'}
+  card.innerHTML='<div class="prayer-top"><span class="ico">'+p.icon+'</span><div><div class="pname">'+name+'</div><div class="en">'+(lang()==="bn"?p.en:lang()==="ar"?p.en:p.bn)+'</div></div></div><div class="actual">'+formatTime(start)+'</div><div class="range">'+label("ওয়াক্ত শুরু","Prayer begins","بداية الوقت")+': <strong>'+formatTime(start)+'</strong></div>'+rangeText;
+  grid.appendChild(card);
+ });
+}
+function updateNextPrayer(){
+ if(countdownTimer)clearInterval(countdownTimer);
+ const now=new Date();const keys=["Fajr","Dhuhr","Asr","Maghrib","Isha"];
+ let upcoming=null;
+ for(const key of keys){if(timings[key]){const d=timeDate(timings[key]);if(d>now){upcoming={key,date:d};break}}}
+ if(!upcoming&&timings.Fajr)upcoming={key:"Fajr",date:timeDate(timings.Fajr,1)};
+ if(!upcoming)return;
+ document.getElementById("nextCard").hidden=false;
+ const p=prayers.find(x=>x.key===upcoming.key);
+ document.getElementById("nextLabel").textContent=label("পরবর্তী ওয়াক্ত","Next prayer","الصلاة التالية");
+ document.getElementById("nextName").textContent=label(p.bn,p.en,p.ar);
+ document.getElementById("nextTime").textContent=formatTime(timings[upcoming.key]);
+ function tick(){let diff=Math.max(0,upcoming.date-new Date());const h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);document.getElementById("countdown").textContent=[h,m,s].map(n=>String(n).padStart(2,"0")).join(":");if(diff<=0)loadPrayerTimes()}
+ tick();countdownTimer=setInterval(tick,1000);
+}
+divisionSelect.addEventListener("change",()=>{selectedDistrict=null;fillDistricts();loadPrayerTimes()});
+districtSelect.addEventListener("change",()=>{selectedDistrict=districts.find(d=>(d.district||d.name)===districtSelect.value);loadPrayerTimes()});
+document.getElementById("timeFormat").addEventListener("change",()=>{renderCards();updateNextPrayer()});
+document.getElementById("schoolSelect").addEventListener("change",loadPrayerTimes);
+document.getElementById("languageSelect").addEventListener("change",()=>{showDate();fillDistricts();renderCards();updateNextPrayer()});
+document.getElementById("year").textContent=new Date().getFullYear();showDate();loadDistricts();
 </script>
-
 </body>
 </html>
