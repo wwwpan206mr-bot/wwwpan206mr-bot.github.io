@@ -737,7 +737,8 @@
       console.error("Quran PDF collection could not be loaded:", error);
       BOOKS = [...DEFAULT_BOOKS];
       renderBooks(searchInput.value);
-      showNotice("Firebase থেকে PDF তালিকা লোড করা যায়নি। Firestore Rules-এ quranPDFs-এর public read অনুমতি পরীক্ষা করুন; আপাতত ডিফল্ট PDF দেখানো হচ্ছে।");
+      const code = error && error.code ? " (" + error.code + ")" : "";
+      showNotice("Firebase থেকে PDF তালিকা লোড করা যায়নি" + code + "। Firestore Rules-এ quranPDFs-এর read অনুমতি পরীক্ষা করুন; আপাতত ডিফল্ট PDF দেখানো হচ্ছে।");
     });
 
     if ("serviceWorker" in navigator) {
